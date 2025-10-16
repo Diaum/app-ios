@@ -1,0 +1,1179 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8017130B2DE6C78C00B77FE1 /* DeviceActivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80DBF6132CB776D100EEA8A6 /* DeviceActivity.framework */; };
+		801713132DE6C78C00B77FE1 /* DiaumDeviceMonitor.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8017130A2DE6C78C00B77FE1 /* DiaumDeviceMonitor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		803989B32CCC06D600E87F57 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 803989B22CCC06D600E87F57 /* StoreKit.framework */; };
+		808A3C4C2E4ACD18002A7812 /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 808A3C4B2E4ACD18002A7812 /* ManagedSettings.framework */; };
+		808A3C4E2E4ACD18002A7812 /* ManagedSettingsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 808A3C4D2E4ACD18002A7812 /* ManagedSettingsUI.framework */; };
+		808A3C562E4ACD18002A7812 /* DiaumShieldConfig.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 808A3C4A2E4ACD18002A7812 /* DiaumShieldConfig.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		80F674AB2D6185510056977F /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 80F674AA2D6185510056977F /* CodeScanner */; };
+		80FF388E2D80DB540032BC5E /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80C6CAFA2D4301B3008680F4 /* WidgetKit.framework */; };
+		80FF388F2D80DB540032BC5E /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80C6CAFC2D4301B3008680F4 /* SwiftUI.framework */; };
+		80FF389C2D80DB560032BC5E /* DiaumWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 80FF388D2D80DB540032BC5E /* DiaumWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		801713112DE6C78C00B77FE1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 801B208D2CB363A10073E9E2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 801713092DE6C78C00B77FE1;
+			remoteInfo = DiaumDeviceMonitor;
+		};
+		801B20A72CB363A20073E9E2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 801B208D2CB363A10073E9E2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 801B20942CB363A10073E9E2;
+			remoteInfo = foqos;
+		};
+		801B20B12CB363A20073E9E2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 801B208D2CB363A10073E9E2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 801B20942CB363A10073E9E2;
+			remoteInfo = foqos;
+		};
+		808A3C542E4ACD18002A7812 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 801B208D2CB363A10073E9E2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 808A3C492E4ACD18002A7812;
+			remoteInfo = DiaumShieldConfig;
+		};
+		80FF389A2D80DB560032BC5E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 801B208D2CB363A10073E9E2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 80FF388C2D80DB540032BC5E;
+			remoteInfo = DiaumWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		80DBF61D2CB776D100EEA8A6 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				808A3C562E4ACD18002A7812 /* DiaumShieldConfig.appex in Embed Foundation Extensions */,
+				801713132DE6C78C00B77FE1 /* DiaumDeviceMonitor.appex in Embed Foundation Extensions */,
+				80FF389C2D80DB560032BC5E /* DiaumWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		8017130A2DE6C78C00B77FE1 /* DiaumDeviceMonitor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DiaumDeviceMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		801B20952CB363A10073E9E2 /* foqos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = foqos.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		801B20A62CB363A20073E9E2 /* foqosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = foqosTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		801B20B02CB363A20073E9E2 /* foqosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = foqosUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		803989B22CCC06D600E87F57 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		808A3C4A2E4ACD18002A7812 /* DiaumShieldConfig.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DiaumShieldConfig.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		808A3C4B2E4ACD18002A7812 /* ManagedSettings.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettings.framework; path = System/Library/Frameworks/ManagedSettings.framework; sourceTree = SDKROOT; };
+		808A3C4D2E4ACD18002A7812 /* ManagedSettingsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettingsUI.framework; path = Library/Frameworks/ManagedSettingsUI.framework; sourceTree = DEVELOPER_DIR; };
+		80C6CAFA2D4301B3008680F4 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		80C6CAFC2D4301B3008680F4 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		80DBF6132CB776D100EEA8A6 /* DeviceActivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DeviceActivity.framework; path = System/Library/Frameworks/DeviceActivity.framework; sourceTree = SDKROOT; };
+		80FF388D2D80DB540032BC5E /* DiaumWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DiaumWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		8015A1F62D80E29B0037DFE9 /* Exceptions for "DiaumWidget" folder in "foqos" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				DiaumWidgetLiveActivity.swift,
+			);
+			target = 801B20942CB363A10073E9E2 /* foqos */;
+		};
+		801713172DE6C78C00B77FE1 /* Exceptions for "DiaumDeviceMonitor" folder in "DiaumDeviceMonitor" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 801713092DE6C78C00B77FE1 /* DiaumDeviceMonitor */;
+		};
+		801713192DE6CCF400B77FE1 /* Exceptions for "DiaumDeviceMonitor" folder in "foqos" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				DeviceActivityMonitorExtension.swift,
+			);
+			target = 801B20942CB363A10073E9E2 /* foqos */;
+		};
+		801C99CE2E9C9B9D000E07CD /* Exceptions for "Diaum" folder in "DiaumWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Models/Schedule.swift,
+				Models/Shared.swift,
+				Utils/AppBlockerUtil.swift,
+			);
+			target = 80FF388C2D80DB540032BC5E /* DiaumWidgetExtension */;
+		};
+		804415942DE7E94B0000CAE4 /* Exceptions for "Diaum" folder in "DiaumDeviceMonitor" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Models/Schedule.swift,
+				Models/Shared.swift,
+				Utils/AppBlockerUtil.swift,
+			);
+			target = 801713092DE6C78C00B77FE1 /* DiaumDeviceMonitor */;
+		};
+		807B2B8A2CC0ACCD00944D2B /* Exceptions for "Diaum" folder in "foqos" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 801B20942CB363A10073E9E2 /* foqos */;
+		};
+		808A3C5A2E4ACD18002A7812 /* Exceptions for "DiaumShieldConfig" folder in "DiaumShieldConfig" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 808A3C492E4ACD18002A7812 /* DiaumShieldConfig */;
+		};
+		80FF38A02D80DB560032BC5E /* Exceptions for "DiaumWidget" folder in "DiaumWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 80FF388C2D80DB540032BC5E /* DiaumWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		8017130C2DE6C78C00B77FE1 /* DiaumDeviceMonitor */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				801713192DE6CCF400B77FE1 /* Exceptions for "DiaumDeviceMonitor" folder in "foqos" target */,
+				801713172DE6C78C00B77FE1 /* Exceptions for "DiaumDeviceMonitor" folder in "DiaumDeviceMonitor" target */,
+			);
+			path = DiaumDeviceMonitor;
+			sourceTree = "<group>";
+		};
+		801B20972CB363A10073E9E2 /* Diaum */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				807B2B8A2CC0ACCD00944D2B /* Exceptions for "Diaum" folder in "foqos" target */,
+				801C99CE2E9C9B9D000E07CD /* Exceptions for "Diaum" folder in "DiaumWidgetExtension" target */,
+				804415942DE7E94B0000CAE4 /* Exceptions for "Diaum" folder in "DiaumDeviceMonitor" target */,
+			);
+			path = Diaum;
+			sourceTree = "<group>";
+		};
+		808A3C4F2E4ACD18002A7812 /* DiaumShieldConfig */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				808A3C5A2E4ACD18002A7812 /* Exceptions for "DiaumShieldConfig" folder in "DiaumShieldConfig" target */,
+			);
+			path = DiaumShieldConfig;
+			sourceTree = "<group>";
+		};
+		80FF38902D80DB540032BC5E /* DiaumWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8015A1F62D80E29B0037DFE9 /* Exceptions for "DiaumWidget" folder in "foqos" target */,
+				80FF38A02D80DB560032BC5E /* Exceptions for "DiaumWidget" folder in "DiaumWidgetExtension" target */,
+			);
+			path = DiaumWidget;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		801713072DE6C78C00B77FE1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8017130B2DE6C78C00B77FE1 /* DeviceActivity.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		801B20922CB363A10073E9E2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80F674AB2D6185510056977F /* CodeScanner in Frameworks */,
+				803989B32CCC06D600E87F57 /* StoreKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		801B20A32CB363A20073E9E2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		801B20AD2CB363A20073E9E2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		808A3C472E4ACD18002A7812 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				808A3C4C2E4ACD18002A7812 /* ManagedSettings.framework in Frameworks */,
+				808A3C4E2E4ACD18002A7812 /* ManagedSettingsUI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		80FF388A2D80DB540032BC5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80FF388F2D80DB540032BC5E /* SwiftUI.framework in Frameworks */,
+				80FF388E2D80DB540032BC5E /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		801B208C2CB363A10073E9E2 = {
+			isa = PBXGroup;
+			children = (
+				801B20972CB363A10073E9E2 /* Diaum */,
+				80FF38902D80DB540032BC5E /* DiaumWidget */,
+				8017130C2DE6C78C00B77FE1 /* DiaumDeviceMonitor */,
+				808A3C4F2E4ACD18002A7812 /* DiaumShieldConfig */,
+				80DBF6122CB776D100EEA8A6 /* Frameworks */,
+				801B20962CB363A10073E9E2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		801B20962CB363A10073E9E2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				801B20952CB363A10073E9E2 /* foqos.app */,
+				801B20A62CB363A20073E9E2 /* foqosTests.xctest */,
+				801B20B02CB363A20073E9E2 /* foqosUITests.xctest */,
+				80FF388D2D80DB540032BC5E /* DiaumWidgetExtension.appex */,
+				8017130A2DE6C78C00B77FE1 /* DiaumDeviceMonitor.appex */,
+				808A3C4A2E4ACD18002A7812 /* DiaumShieldConfig.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		80DBF6122CB776D100EEA8A6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				803989B22CCC06D600E87F57 /* StoreKit.framework */,
+				80DBF6132CB776D100EEA8A6 /* DeviceActivity.framework */,
+				80C6CAFA2D4301B3008680F4 /* WidgetKit.framework */,
+				80C6CAFC2D4301B3008680F4 /* SwiftUI.framework */,
+				808A3C4B2E4ACD18002A7812 /* ManagedSettings.framework */,
+				808A3C4D2E4ACD18002A7812 /* ManagedSettingsUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		801713092DE6C78C00B77FE1 /* DiaumDeviceMonitor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 801713162DE6C78C00B77FE1 /* Build configuration list for PBXNativeTarget "DiaumDeviceMonitor" */;
+			buildPhases = (
+				801713062DE6C78C00B77FE1 /* Sources */,
+				801713072DE6C78C00B77FE1 /* Frameworks */,
+				801713082DE6C78C00B77FE1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				8017130C2DE6C78C00B77FE1 /* DiaumDeviceMonitor */,
+			);
+			name = DiaumDeviceMonitor;
+			packageProductDependencies = (
+			);
+			productName = DiaumDeviceMonitor;
+			productReference = 8017130A2DE6C78C00B77FE1 /* DiaumDeviceMonitor.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		801B20942CB363A10073E9E2 /* foqos */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 801B20BA2CB363A20073E9E2 /* Build configuration list for PBXNativeTarget "foqos" */;
+			buildPhases = (
+				801B20912CB363A10073E9E2 /* Sources */,
+				801B20922CB363A10073E9E2 /* Frameworks */,
+				801B20932CB363A10073E9E2 /* Resources */,
+				80DBF61D2CB776D100EEA8A6 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				80FF389B2D80DB560032BC5E /* PBXTargetDependency */,
+				801713122DE6C78C00B77FE1 /* PBXTargetDependency */,
+				808A3C552E4ACD18002A7812 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				801B20972CB363A10073E9E2 /* Diaum */,
+			);
+			name = foqos;
+			packageProductDependencies = (
+				80F674AA2D6185510056977F /* CodeScanner */,
+			);
+			productName = foqos;
+			productReference = 801B20952CB363A10073E9E2 /* foqos.app */;
+			productType = "com.apple.product-type.application";
+		};
+		801B20A52CB363A20073E9E2 /* foqosTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 801B20BD2CB363A20073E9E2 /* Build configuration list for PBXNativeTarget "foqosTests" */;
+			buildPhases = (
+				801B20A22CB363A20073E9E2 /* Sources */,
+				801B20A32CB363A20073E9E2 /* Frameworks */,
+				801B20A42CB363A20073E9E2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				801B20A82CB363A20073E9E2 /* PBXTargetDependency */,
+			);
+			name = foqosTests;
+			packageProductDependencies = (
+			);
+			productName = foqosTests;
+			productReference = 801B20A62CB363A20073E9E2 /* foqosTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		801B20AF2CB363A20073E9E2 /* foqosUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 801B20C02CB363A20073E9E2 /* Build configuration list for PBXNativeTarget "foqosUITests" */;
+			buildPhases = (
+				801B20AC2CB363A20073E9E2 /* Sources */,
+				801B20AD2CB363A20073E9E2 /* Frameworks */,
+				801B20AE2CB363A20073E9E2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				801B20B22CB363A20073E9E2 /* PBXTargetDependency */,
+			);
+			name = foqosUITests;
+			packageProductDependencies = (
+			);
+			productName = foqosUITests;
+			productReference = 801B20B02CB363A20073E9E2 /* foqosUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		808A3C492E4ACD18002A7812 /* DiaumShieldConfig */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 808A3C592E4ACD18002A7812 /* Build configuration list for PBXNativeTarget "DiaumShieldConfig" */;
+			buildPhases = (
+				808A3C462E4ACD18002A7812 /* Sources */,
+				808A3C472E4ACD18002A7812 /* Frameworks */,
+				808A3C482E4ACD18002A7812 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				808A3C4F2E4ACD18002A7812 /* DiaumShieldConfig */,
+			);
+			name = DiaumShieldConfig;
+			packageProductDependencies = (
+			);
+			productName = DiaumShieldConfig;
+			productReference = 808A3C4A2E4ACD18002A7812 /* DiaumShieldConfig.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		80FF388C2D80DB540032BC5E /* DiaumWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 80FF389F2D80DB560032BC5E /* Build configuration list for PBXNativeTarget "DiaumWidgetExtension" */;
+			buildPhases = (
+				80FF38892D80DB540032BC5E /* Sources */,
+				80FF388A2D80DB540032BC5E /* Frameworks */,
+				80FF388B2D80DB540032BC5E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				80FF38902D80DB540032BC5E /* DiaumWidget */,
+			);
+			name = DiaumWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = DiaumWidgetExtension;
+			productReference = 80FF388D2D80DB540032BC5E /* DiaumWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		801B208D2CB363A10073E9E2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1610;
+				TargetAttributes = {
+					801713092DE6C78C00B77FE1 = {
+						CreatedOnToolsVersion = 16.3;
+					};
+					801B20942CB363A10073E9E2 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					801B20A52CB363A20073E9E2 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 801B20942CB363A10073E9E2;
+					};
+					801B20AF2CB363A20073E9E2 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 801B20942CB363A10073E9E2;
+					};
+					808A3C492E4ACD18002A7812 = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					80FF388C2D80DB540032BC5E = {
+						CreatedOnToolsVersion = 16.2;
+					};
+				};
+			};
+			buildConfigurationList = 801B20902CB363A10073E9E2 /* Build configuration list for PBXProject "Diaum" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 801B208C2CB363A10073E9E2;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				8021D2462D61837E00A92114 /* XCRemoteSwiftPackageReference "CodeScanner" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 801B20962CB363A10073E9E2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				801B20942CB363A10073E9E2 /* foqos */,
+				801B20A52CB363A20073E9E2 /* foqosTests */,
+				801B20AF2CB363A20073E9E2 /* foqosUITests */,
+				80FF388C2D80DB540032BC5E /* DiaumWidgetExtension */,
+				801713092DE6C78C00B77FE1 /* DiaumDeviceMonitor */,
+				808A3C492E4ACD18002A7812 /* DiaumShieldConfig */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		801713082DE6C78C00B77FE1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		801B20932CB363A10073E9E2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		801B20A42CB363A20073E9E2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		801B20AE2CB363A20073E9E2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		808A3C482E4ACD18002A7812 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		80FF388B2D80DB540032BC5E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		801713062DE6C78C00B77FE1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		801B20912CB363A10073E9E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		801B20A22CB363A20073E9E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		801B20AC2CB363A20073E9E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		808A3C462E4ACD18002A7812 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		80FF38892D80DB540032BC5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		801713122DE6C78C00B77FE1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 801713092DE6C78C00B77FE1 /* DiaumDeviceMonitor */;
+			targetProxy = 801713112DE6C78C00B77FE1 /* PBXContainerItemProxy */;
+		};
+		801B20A82CB363A20073E9E2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 801B20942CB363A10073E9E2 /* foqos */;
+			targetProxy = 801B20A72CB363A20073E9E2 /* PBXContainerItemProxy */;
+		};
+		801B20B22CB363A20073E9E2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 801B20942CB363A10073E9E2 /* foqos */;
+			targetProxy = 801B20B12CB363A20073E9E2 /* PBXContainerItemProxy */;
+		};
+		808A3C552E4ACD18002A7812 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 808A3C492E4ACD18002A7812 /* DiaumShieldConfig */;
+			targetProxy = 808A3C542E4ACD18002A7812 /* PBXContainerItemProxy */;
+		};
+		80FF389B2D80DB560032BC5E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 80FF388C2D80DB540032BC5E /* DiaumWidgetExtension */;
+			targetProxy = 80FF389A2D80DB560032BC5E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		801713142DE6C78C00B77FE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = DiaumDeviceMonitor/DiaumDeviceMonitor.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SKHUBRDPGV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DiaumDeviceMonitor/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DiaumDeviceMonitor;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.11;
+				PRODUCT_BUNDLE_IDENTIFIER = app.diaum.monitor;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		801713152DE6C78C00B77FE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = DiaumDeviceMonitor/DiaumDeviceMonitor.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SKHUBRDPGV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DiaumDeviceMonitor/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DiaumDeviceMonitor;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.11;
+				PRODUCT_BUNDLE_IDENTIFIER = app.diaum.monitor;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		801B20B82CB363A20073E9E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		801B20B92CB363A20073E9E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		801B20BB2CB363A20073E9E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = diaum/foqos.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"diaum/Preview Content\"";
+				DEVELOPMENT_TEAM = SKHUBRDPGV;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = diaum/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Diaum;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NFCReaderUsageDescription = "This app uses NFC to scan tags for item identification.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need camera access to scan QR codes to active/deactivate profiles";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.24;
+				PRODUCT_BUNDLE_IDENTIFIER = app.diaum;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		801B20BC2CB363A20073E9E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = diaum/foqos.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"diaum/Preview Content\"";
+				DEVELOPMENT_TEAM = SKHUBRDPGV;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = diaum/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Diaum;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NFCReaderUsageDescription = "This app uses NFC to scan tags for item identification.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need camera access to scan QR codes to active/deactivate profiles";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.24;
+				PRODUCT_BUNDLE_IDENTIFIER = app.diaum;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		801B20BE2CB363A20073E9E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = SKHUBRDPGV;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.diaum.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/foqos.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/foqos";
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		801B20BF2CB363A20073E9E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = SKHUBRDPGV;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.diaum.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/foqos.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/foqos";
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		801B20C12CB363A20073E9E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = SKHUBRDPGV;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.diaum.test;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_TARGET_NAME = foqos;
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		801B20C22CB363A20073E9E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = SKHUBRDPGV;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.diaum.test;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_TARGET_NAME = foqos;
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		808A3C572E4ACD18002A7812 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = DiaumShieldConfig/DiaumShieldConfig.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SKHUBRDPGV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DiaumShieldConfig/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DiaumShieldConfig;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.diaum.shield;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		808A3C582E4ACD18002A7812 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = DiaumShieldConfig/DiaumShieldConfig.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SKHUBRDPGV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DiaumShieldConfig/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DiaumShieldConfig;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.diaum.shield;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		80FF389D2D80DB560032BC5E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = DiaumWidget/DiaumWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SKHUBRDPGV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DiaumWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DiaumWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.11;
+				PRODUCT_BUNDLE_IDENTIFIER = app.diaum.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		80FF389E2D80DB560032BC5E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = DiaumWidget/DiaumWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SKHUBRDPGV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DiaumWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DiaumWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.11;
+				PRODUCT_BUNDLE_IDENTIFIER = app.diaum.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		801713162DE6C78C00B77FE1 /* Build configuration list for PBXNativeTarget "DiaumDeviceMonitor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				801713142DE6C78C00B77FE1 /* Debug */,
+				801713152DE6C78C00B77FE1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		801B20902CB363A10073E9E2 /* Build configuration list for PBXProject "Diaum" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				801B20B82CB363A20073E9E2 /* Debug */,
+				801B20B92CB363A20073E9E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		801B20BA2CB363A20073E9E2 /* Build configuration list for PBXNativeTarget "foqos" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				801B20BB2CB363A20073E9E2 /* Debug */,
+				801B20BC2CB363A20073E9E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		801B20BD2CB363A20073E9E2 /* Build configuration list for PBXNativeTarget "foqosTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				801B20BE2CB363A20073E9E2 /* Debug */,
+				801B20BF2CB363A20073E9E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		801B20C02CB363A20073E9E2 /* Build configuration list for PBXNativeTarget "foqosUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				801B20C12CB363A20073E9E2 /* Debug */,
+				801B20C22CB363A20073E9E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		808A3C592E4ACD18002A7812 /* Build configuration list for PBXNativeTarget "DiaumShieldConfig" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				808A3C572E4ACD18002A7812 /* Debug */,
+				808A3C582E4ACD18002A7812 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		80FF389F2D80DB560032BC5E /* Build configuration list for PBXNativeTarget "DiaumWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				80FF389D2D80DB560032BC5E /* Debug */,
+				80FF389E2D80DB560032BC5E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8021D2462D61837E00A92114 /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/CodeScanner";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		80F674AA2D6185510056977F /* CodeScanner */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8021D2462D61837E00A92114 /* XCRemoteSwiftPackageReference "CodeScanner" */;
+			productName = CodeScanner;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 801B208D2CB363A10073E9E2 /* Project object */;
+}
