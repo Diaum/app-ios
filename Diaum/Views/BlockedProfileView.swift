@@ -12,6 +12,9 @@ struct BlockedProfileView: View {
 
   // If profile is nil, we're creating a new profile
   var profile: BlockedProfiles?
+  
+  // Callback to notify when a new profile is created and should be activated
+  var onProfileCreated: ((BlockedProfiles) -> Void)?
 
   @State private var name: String = ""
   @State private var enableLiveActivity: Bool = false
@@ -76,7 +79,7 @@ struct BlockedProfileView: View {
       initialValue: profile?.selectedActivity ?? FamilyActivitySelection()
     )
     _enableLiveActivity = State(
-      initialValue: profile?.enableLiveActivity ?? false
+      initialValue: profile?.enableLiveActivity ?? true
     )
     _enableBreaks = State(
       initialValue: profile?.enableBreaks ?? false
@@ -91,13 +94,13 @@ struct BlockedProfileView: View {
       initialValue: profile?.enableAllowModeDomains ?? false
     )
     _enableReminder = State(
-      initialValue: profile?.reminderTimeInSeconds != nil
+      initialValue: profile?.reminderTimeInSeconds != nil || profile == nil
     )
     _disableBackgroundStops = State(
       initialValue: profile?.disableBackgroundStops ?? false
     )
     _reminderTimeInMinutes = State(
-      initialValue: Int(profile?.reminderTimeInSeconds ?? 900) / 60
+      initialValue: Int(profile?.reminderTimeInSeconds ?? 300) / 60
     )
     _customReminderMessage = State(
       initialValue: profile?.customReminderMessage ?? ""

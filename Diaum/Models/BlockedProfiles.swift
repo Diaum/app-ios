@@ -14,8 +14,8 @@ class BlockedProfiles {
   var blockingStrategyId: String?
   var order: Int = 0
 
-  var enableLiveActivity: Bool = false
-  var reminderTimeInSeconds: UInt32?
+  var enableLiveActivity: Bool = true
+  var reminderTimeInSeconds: UInt32? = 300  // 5 minutes default
   var enableBreaks: Bool = false
   var enableStrictMode: Bool = false
   var enableAllowMode: Bool = false
@@ -45,8 +45,8 @@ class BlockedProfiles {
     createdAt: Date = Date(),
     updatedAt: Date = Date(),
     blockingStrategyId: String = NFCBlockingStrategy.id,
-    enableLiveActivity: Bool = false,
-    reminderTimeInSeconds: UInt32? = nil,
+    enableLiveActivity: Bool = true,
+    reminderTimeInSeconds: UInt32? = 300,
     customReminderMessage: String? = nil,
     enableBreaks: Bool = false,
     enableStrictMode: Bool = false,
@@ -288,8 +288,8 @@ class BlockedProfiles {
     name: String,
     selection: FamilyActivitySelection = FamilyActivitySelection(),
     blockingStrategyId: String = NFCBlockingStrategy.id,
-    enableLiveActivity: Bool = false,
-    reminderTimeInSeconds: UInt32? = nil,
+    enableLiveActivity: Bool = true,
+    reminderTimeInSeconds: UInt32? = 300,
     customReminderMessage: String = "",
     enableBreaks: Bool = false,
     enableStrictMode: Bool = false,
