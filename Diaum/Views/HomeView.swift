@@ -5,7 +5,6 @@ import SwiftUI
 struct HomeView: View {
   @Environment(\.modelContext) private var context
   @Environment(\.openURL) var openURL
-
   @Environment(\.scenePhase) private var scenePhase
 
   @EnvironmentObject var requestAuthorizer: RequestAuthorizer
@@ -17,28 +16,15 @@ struct HomeView: View {
   @Query(sort: [
     SortDescriptor(\BlockedProfiles.order, order: .forward),
     SortDescriptor(\BlockedProfiles.createdAt, order: .reverse),
-  ]) private
-    var profiles: [BlockedProfiles]
+  ]) private var profiles: [BlockedProfiles]
+  
   @State private var isProfileListPresent = false
-
-  // New profile view
   @State private var showNewProfileView = false
-
-  // Edit profile
   @State private var profileToEdit: BlockedProfiles? = nil
-
-  // Stats sheet
   @State private var profileToShowStats: BlockedProfiles? = nil
-
-  // Donation View
   @State private var showDonationView = false
-
-  // Emergency View
   @State private var showEmergencyView = false
-
-  // Navigate to profile
   @State private var navigateToProfileId: UUID? = nil
-
 
   // Alerts
   @State private var showingAlert = false
@@ -68,77 +54,84 @@ struct HomeView: View {
   }
 
   var body: some View {
-    ScrollView(showsIndicators: false) {
-      VStack(alignment: .leading, spacing: 30) {
-        HStack(alignment: .center) {
-          AppTitle()
-          Spacer()
-          RoundedButton(
-            "Support",
-            action: {
-              showDonationView = true
-            }, iconName: "heart.fill")
-        }
-        .padding(.trailing, 16)
-        .padding(.top, 16)
-
-        if profiles.isEmpty {
-          Welcome(onTap: {
-            showNewProfileView = true
-          })
-          .padding(.horizontal, 16)
-        }
-
-        if !profiles.isEmpty {
-          BlockedProfileCarousel(
-            profiles: profiles,
-            isBlocking: isBlocking,
-            isBreakAvailable: isBreakAvailable,
-            isBreakActive: isBreakActive,
-            activeSessionProfileId: activeSessionProfileId,
-            elapsedTime: strategyManager.elapsedTime,
-            startingProfileId: navigateToProfileId,
-            onStartTapped: { profile in
-              strategyButtonPress(profile)
-            },
-            onStopTapped: { profile in
-              strategyButtonPress(profile)
-            },
-            onEditTapped: { profile in
-              profileToEdit = profile
-            },
-            onStatsTapped: { profile in
-              profileToShowStats = profile
-            },
-            onBreakTapped: { _ in
-              strategyManager.toggleBreak()
-            },
-            onManageTapped: {
-              isProfileListPresent = true
-            },
-            onEmergencyTapped: {
-              showEmergencyView = true
-            },
-          )
-        }
-
-        VersionFooter(
-          authorizationStatus: requestAuthorizer.getAuthorizationStatus(),
-          onAuthorizationHandler: {
-            requestAuthorizer.requestAuthorization()
+    ZStack {
+      // Background - Dark gradient/solid color (#121212)
+      Color(red: 0.07, green: 0.07, blue: 0.07) // #121212
+        .ignoresSafeArea()
+      
+      VStack(spacing: 0) {
+        Spacer()
+        
+        // Main Content - Centered vertically and horizontally
+        VStack(spacing: 16) {
+          // Label Above Button - "TAP TO UNBRICK"
+          if isBlocking {
+            Text("TAP TO UNBRICK")
+              .font(.system(size: 16, weight: .regular, design: .monospaced))
+              .foregroundColor(.white)
+              .multilineTextAlignment(.center)
           }
-        )
-        .frame(maxWidth: .infinity)
-        .padding(.top, 15)
+          
+          // Main BRICK Button
+          Button(action: {
+            if isBlocking {
+              if let activeProfile = strategyManager.activeSession?.blockedProfile {
+                strategyButtonPress(activeProfile)
+              }
+            } else {
+              if profiles.isEmpty {
+                showNewProfileView = true
+              } else {
+                strategyButtonPress(profiles[0])
+              }
+            }
+          }) {
+            Text("BRICK")
+              .font(.system(size: 18, weight: .regular, design: .monospaced))
+              .foregroundColor(.white)
+              .frame(width: 120, height: 120)
+              .background(
+                RoundedRectangle(cornerRadius: 12)
+                  .fill(Color(red: 0.48, green: 0.48, blue: 0.55)) // #7B7B8C
+                  .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
+              )
+          }
+          .buttonStyle(PlainButtonStyle())
+          .scaleEffect(isBlocking ? 1.0 : 1.0)
+          .animation(.easeInOut(duration: 0.2), value: isBlocking)
+          
+          // Label Below Button - "DEFAULT"
+          Text("DEFAULT")
+            .font(.system(size: 14, weight: .regular, design: .monospaced))
+            .foregroundColor(.white.opacity(0.7))
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+            .background(
+              RoundedRectangle(cornerRadius: 8)
+                .stroke(Color.white.opacity(0.3), lineWidth: 1)
+            )
+          
+          // Timer Counter - "YOU'VE BEEN BRICKED FOR"
+          if isBlocking {
+            VStack(spacing: 4) {
+              Text("YOU'VE BEEN BRICKED FOR")
+                .font(.system(size: 12, weight: .regular, design: .monospaced))
+                .foregroundColor(.white.opacity(0.6))
+              
+              Text(formatElapsedTime(strategyManager.elapsedTime))
+                .font(.system(size: 12, weight: .regular, design: .monospaced))
+                .foregroundColor(.white.opacity(0.6))
+            }
+          }
+        }
+        
+        Spacer()
       }
     }
     .refreshable {
       loadApp()
     }
-    .padding(.top, 1)
-    .sheet(
-      isPresented: $isProfileListPresent,
-    ) {
+    .sheet(isPresented: $isProfileListPresent) {
       BlockedProfileListView()
     }
     .frame(
@@ -191,17 +184,15 @@ struct HomeView: View {
       IntroView {
         requestAuthorizer.requestAuthorization()
       }.interactiveDismissDisabled()
-    }.sheet(item: $profileToEdit) { profile in
+    }
+    .sheet(item: $profileToEdit) { profile in
       BlockedProfileView(profile: profile)
     }
     .sheet(item: $profileToShowStats) { profile in
       ProfileInsightsView(profile: profile)
     }
-    .sheet(
-      isPresented: $showNewProfileView,
-    ) {
+    .sheet(isPresented: $showNewProfileView) {
       BlockedProfileView(profile: nil) { newProfile in
-        // Automatically activate the newly created profile
         strategyManager.toggleBlocking(context: context, activeProfile: newProfile)
       }
     }
@@ -225,14 +216,11 @@ struct HomeView: View {
   }
 
   private func toggleSessionFromDeeplink(_ profileId: String, link: URL) {
-    strategyManager
-      .toggleSessionFromDeeplink(profileId, url: link, context: context)
+    strategyManager.toggleSessionFromDeeplink(profileId, url: link, context: context)
   }
 
   private func strategyButtonPress(_ profile: BlockedProfiles) {
-    strategyManager
-      .toggleBlocking(context: context, activeProfile: profile)
-
+    strategyManager.toggleBlocking(context: context, activeProfile: profile)
     ratingManager.incrementLaunchCount()
   }
 
@@ -257,6 +245,18 @@ struct HomeView: View {
 
   private func dismissAlert() {
     showingAlert = false
+  }
+  
+  private func formatElapsedTime(_ timeInterval: TimeInterval) -> String {
+    let hours = Int(timeInterval) / 3600
+    let minutes = Int(timeInterval) % 3600 / 60
+    let seconds = Int(timeInterval) % 60
+    
+    if hours > 0 {
+      return String(format: "%d:%02d:%02d", hours, minutes, seconds)
+    } else {
+      return String(format: "%02d:%02d", minutes, seconds)
+    }
   }
 }
 
