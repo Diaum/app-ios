@@ -5,6 +5,7 @@ import SwiftUI
 struct BlockedProfileListView: View {
   @Environment(\.modelContext) private var context
   @Environment(\.dismiss) private var dismiss
+  @EnvironmentObject private var strategyManager: StrategyManager
 
   @Query(sort: [
     SortDescriptor(\BlockedProfiles.order, order: .forward),
@@ -81,7 +82,11 @@ struct BlockedProfileListView: View {
         }
       }
       .sheet(isPresented: $showingCreateProfile) {
-        BlockedProfileView()
+        BlockedProfileView(profile: nil) { newProfile in
+          // Automatically activate the newly created profile
+          strategyManager.toggleBlocking(context: context, activeProfile: newProfile)
+          dismiss()
+        }
       }
       .sheet(item: $profileToEdit) { profile in
         BlockedProfileView(profile: profile)
@@ -144,5 +149,6 @@ struct BlockedProfileListView: View {
 
 #Preview {
   BlockedProfileListView()
+    .environmentObject(StrategyManager())
     .modelContainer(for: BlockedProfiles.self, inMemory: true)
 }

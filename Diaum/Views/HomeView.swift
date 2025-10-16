@@ -213,7 +213,10 @@ struct HomeView: View {
     .sheet(
       isPresented: $showNewProfileView,
     ) {
-      BlockedProfileView(profile: nil)
+      BlockedProfileView(profile: nil) { newProfile in
+        // Automatically activate the newly created profile
+        strategyManager.toggleBlocking(context: context, activeProfile: newProfile)
+      }
     }
     .sheet(isPresented: $strategyManager.showCustomStrategyView) {
       BlockingStrategyActionView(

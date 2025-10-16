@@ -72,8 +72,9 @@ struct BlockedProfileView: View {
     strategyManager.activeSession?.isActive ?? false
   }
 
-  init(profile: BlockedProfiles? = nil) {
+  init(profile: BlockedProfiles? = nil, onProfileCreated: ((BlockedProfiles) -> Void)? = nil) {
     self.profile = profile
+    self.onProfileCreated = onProfileCreated
     _name = State(initialValue: profile?.name ?? "")
     _selectedActivity = State(
       initialValue: profile?.selectedActivity ?? FamilyActivitySelection()
@@ -539,6 +540,9 @@ struct BlockedProfileView: View {
 
         // Schedule restrictions
         DeviceActivityCenterUtil.scheduleRestrictions(for: newProfile)
+        
+        // Call the callback to notify that a new profile was created
+        onProfileCreated?(newProfile)
       }
 
       dismiss()
