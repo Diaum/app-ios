@@ -39,14 +39,6 @@ struct HomeView: View {
   // Navigate to profile
   @State private var navigateToProfileId: UUID? = nil
 
-  // Activity sessions
-  @Query(sort: \BlockedProfileSession.startTime, order: .reverse) private
-    var sessions: [BlockedProfileSession]
-  @Query(
-    filter: #Predicate<BlockedProfileSession> { $0.endTime != nil },
-    sort: \BlockedProfileSession.endTime,
-    order: .reverse
-  ) private var recentCompletedSessions: [BlockedProfileSession]
 
   // Alerts
   @State private var showingAlert = false
@@ -98,11 +90,6 @@ struct HomeView: View {
         }
 
         if !profiles.isEmpty {
-          BlockedSessionsHabitTracker(
-            sessions: recentCompletedSessions
-          )
-          .padding(.horizontal, 16)
-
           BlockedProfileCarousel(
             profiles: profiles,
             isBlocking: isBlocking,
