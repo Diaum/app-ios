@@ -101,22 +101,23 @@ struct HomeView: View {
                 .frame(width: 120, height: 120)
                 .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
               
-              // Emergency progress bar (red, growing from bottom to top)
-              if isEmergencyStopActive {
-                VStack {
-                  Spacer()
-                  RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.red.opacity(0.3))
-                    .frame(width: 120, height: 120 * emergencyProgress)
-                    .animation(.linear(duration: 0.1), value: emergencyProgress)
+              // Button text with progress overlay
+              ZStack {
+                Text("BRICK")
+                  .font(.system(size: 18, weight: .regular, design: .monospaced))
+                  .foregroundColor(.white)
+                
+                // Emergency progress bar (red, growing from bottom to top) - inside text area
+                if isEmergencyStopActive {
+                  VStack {
+                    Spacer()
+                    RoundedRectangle(cornerRadius: 6)
+                      .fill(Color.red.opacity(0.4))
+                      .frame(width: 80, height: 20 * emergencyProgress)
+                      .animation(.linear(duration: 0.1), value: emergencyProgress)
+                  }
                 }
               }
-              
-              // Button text
-              Text("BRICK")
-                .font(.system(size: 18, weight: .regular, design: .monospaced))
-                .foregroundColor(.white)
-                .zIndex(1) // Ensure text stays on top
             }
           }
           .buttonStyle(PlainButtonStyle())
@@ -305,11 +306,9 @@ struct HomeView: View {
   
   // Emergency Stop Functions
   private func emergencyStop() {
-    // Force stop any active session immediately
+    // Force stop any active session immediately using emergency unblock
     if isBlocking {
-      if let activeProfile = strategyManager.activeSession?.blockedProfile {
-        strategyManager.toggleBlocking(context: context, activeProfile: activeProfile)
-      }
+      strategyManager.emergencyUnblock(context: context)
     }
     // Clear any timers and reset progress
     cancelEmergencyStopTimer()
