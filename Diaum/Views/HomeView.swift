@@ -35,12 +35,12 @@ struct HomeView: View {
 
   // Intro sheet
   @AppStorage("showIntroScreen") private var showIntroScreen = true
+  
+  // Last used profile
+  @AppStorage("lastUsedProfileId") private var lastUsedProfileId: String = ""
 
   // UI States
   @State private var opacityValue = 1.0
-  @State private var emergencyProgress: Double = 0.0
-  @State private var emergencyStopTimer: Timer?
-  @State private var isEmergencyStopActive = false
 
   var isBlocking: Bool {
     return strategyManager.isBlocking
@@ -82,65 +82,74 @@ struct HomeView: View {
                 strategyButtonPress(activeProfile)
               }
             } else {
+              // Only allow blocking if there's a valid profile selected
               if let selectedProfile = selectedProfile {
                 strategyButtonPress(selectedProfile)
               } else if profiles.isEmpty {
                 showNewProfileView = true
               } else {
-                // Use first profile if none selected
-                strategyButtonPress(profiles[0])
+                // Show profile selection if no profile is selected
+                showProfileModal = true
               }
             }
           }) {
             ZStack {
-              // Button background
-              RoundedRectangle(cornerRadius: 12)
-                .fill(Color(red: 0.48, green: 0.48, blue: 0.55)) // #7B7B8C
+              // Button background with enhanced lighting and shadow
+              RoundedRectangle(cornerRadius: 16)
+                .fill(
+                  LinearGradient(
+                    gradient: Gradient(colors: [
+                      Color(red: 0.55, green: 0.55, blue: 0.62), // Lighter top
+                      Color(red: 0.42, green: 0.42, blue: 0.48)  // Darker bottom
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                  )
+                )
                 .frame(width: 120, height: 120)
-                .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
-              
-              // Emergency progress bar (red, growing from bottom to top) - inside button
-              if isEmergencyStopActive {
-                VStack {
-                  Spacer()
-                  RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.red.opacity(0.3))
-                    .frame(width: 120, height: 120 * emergencyProgress)
-                    .animation(.linear(duration: 0.1), value: emergencyProgress)
-                }
-              }
+                .overlay(
+                  RoundedRectangle(cornerRadius: 16)
+                    .stroke(
+                      LinearGradient(
+                        gradient: Gradient(colors: [
+                          Color.white.opacity(0.3),
+                          Color.clear,
+                          Color.black.opacity(0.2)
+                        ]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                      ),
+                      lineWidth: 1
+                    )
+                )
+                .shadow(color: .black.opacity(0.3), radius: 8, x: 0, y: 4)
+                .shadow(color: .white.opacity(0.1), radius: 2, x: 0, y: -1)
               
               // Button text
               Text("BRICK")
-                .font(.system(size: 18, weight: .regular, design: .monospaced))
+                .font(.system(size: 18, weight: .medium, design: .monospaced))
                 .foregroundColor(.white)
-                .zIndex(1) // Ensure text stays on top
+                .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
             }
           }
           .buttonStyle(PlainButtonStyle())
-          .onLongPressGesture(minimumDuration: 2.0, maximumDistance: 50) {
-            // Emergency stop - force stop any active session
-            emergencyStop()
-          } onPressingChanged: { pressing in
-            if pressing {
-              startEmergencyStopTimer()
-            } else {
-              cancelEmergencyStopTimer()
-            }
-          }
           
-          // Label Below Button - "DEFAULT" or Profile Name (Clickable)
+          // Label Below Button - Profile Name (Clickable)
           Button(action: {
             showProfileModal = true
           }) {
-            Text(selectedProfile?.name ?? "DEFAULT")
-              .font(.system(size: 14, weight: .regular, design: .monospaced))
-              .foregroundColor(.white.opacity(0.7))
-              .padding(.horizontal, 16)
-              .padding(.vertical, 8)
+            Text(selectedProfile?.name ?? "MODE")
+              .font(.system(size: 14, weight: .medium, design: .monospaced))
+              .foregroundColor(.white.opacity(0.8))
+              .padding(.horizontal, 20)
+              .padding(.vertical, 10)
               .background(
-                RoundedRectangle(cornerRadius: 8)
-                  .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                RoundedRectangle(cornerRadius: 16)
+                  .stroke(Color.white.opacity(0.4), lineWidth: 2)
+                  .background(
+                    RoundedRectangle(cornerRadius: 16)
+                      .fill(Color.black.opacity(0.2))
+                  )
               )
           }
           .buttonStyle(PlainButtonStyle())
@@ -280,6 +289,7 @@ struct HomeView: View {
   }
 
   private func strategyButtonPress(_ profile: BlockedProfiles) {
+    saveLastUsedProfile(profile)
     strategyManager.toggleBlocking(context: context, activeProfile: profile)
     ratingManager.incrementLaunchCount()
   }
@@ -291,6 +301,19 @@ struct HomeView: View {
   private func onAppearApp() {
     strategyManager.loadActiveSession(context: context)
     strategyManager.cleanUpGhostSchedules(context: context)
+    loadLastUsedProfile()
+  }
+  
+  private func loadLastUsedProfile() {
+    if !lastUsedProfileId.isEmpty {
+      if let profileId = UUID(uuidString: lastUsedProfileId) {
+        selectedProfile = profiles.first { $0.id == profileId }
+      }
+    }
+  }
+  
+  private func saveLastUsedProfile(_ profile: BlockedProfiles) {
+    lastUsedProfileId = profile.id.uuidString
   }
 
   private func unloadApp() {
@@ -305,39 +328,6 @@ struct HomeView: View {
 
   private func dismissAlert() {
     showingAlert = false
-  }
-  
-  // Emergency Stop Functions
-  private func emergencyStop() {
-    // Force stop any active session immediately using emergency unblock
-    if isBlocking {
-      strategyManager.emergencyUnblock(context: context)
-    }
-    // Clear any timers and reset progress
-    cancelEmergencyStopTimer()
-    emergencyProgress = 0.0
-    isEmergencyStopActive = false
-  }
-  
-  private func startEmergencyStopTimer() {
-    cancelEmergencyStopTimer() // Cancel any existing timer
-    isEmergencyStopActive = true
-    emergencyProgress = 0.0
-    
-    // Start progress animation
-    emergencyStopTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
-      emergencyProgress += 0.025 // 2 seconds total (0.05 * 40 = 2.0)
-      if emergencyProgress >= 1.0 {
-        emergencyStop()
-      }
-    }
-  }
-  
-  private func cancelEmergencyStopTimer() {
-    emergencyStopTimer?.invalidate()
-    emergencyStopTimer = nil
-    isEmergencyStopActive = false
-    emergencyProgress = 0.0
   }
   
   private func formatElapsedTime(_ timeInterval: TimeInterval) -> String {
