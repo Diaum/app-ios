@@ -25,6 +25,8 @@ struct HomeView: View {
   @State private var showDonationView = false
   @State private var showEmergencyView = false
   @State private var navigateToProfileId: UUID? = nil
+  @State private var selectedProfile: BlockedProfiles? = nil
+  @State private var showProfileModal = false
 
   // Alerts
   @State private var showingAlert = false
@@ -79,9 +81,12 @@ struct HomeView: View {
                 strategyButtonPress(activeProfile)
               }
             } else {
-              if profiles.isEmpty {
+              if let selectedProfile = selectedProfile {
+                strategyButtonPress(selectedProfile)
+              } else if profiles.isEmpty {
                 showNewProfileView = true
               } else {
+                // Use first profile if none selected
                 strategyButtonPress(profiles[0])
               }
             }
@@ -100,16 +105,21 @@ struct HomeView: View {
           .scaleEffect(isBlocking ? 1.0 : 1.0)
           .animation(.easeInOut(duration: 0.2), value: isBlocking)
           
-          // Label Below Button - "DEFAULT"
-          Text("DEFAULT")
-            .font(.system(size: 14, weight: .regular, design: .monospaced))
-            .foregroundColor(.white.opacity(0.7))
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
-            .background(
-              RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.white.opacity(0.3), lineWidth: 1)
-            )
+          // Label Below Button - "DEFAULT" or Profile Name (Clickable)
+          Button(action: {
+            showProfileModal = true
+          }) {
+            Text(selectedProfile?.name ?? "DEFAULT")
+              .font(.system(size: 14, weight: .regular, design: .monospaced))
+              .foregroundColor(.white.opacity(0.7))
+              .padding(.horizontal, 16)
+              .padding(.vertical, 8)
+              .background(
+                RoundedRectangle(cornerRadius: 8)
+                  .stroke(Color.white.opacity(0.3), lineWidth: 1)
+              )
+          }
+          .buttonStyle(PlainButtonStyle())
           
           // Timer Counter - "YOU'VE BEEN BRICKED FOR"
           if isBlocking {
@@ -163,6 +173,10 @@ struct HomeView: View {
     .onChange(of: profiles) { oldValue, newValue in
       if !newValue.isEmpty {
         loadApp()
+        // Auto-select first profile if none selected
+        if selectedProfile == nil {
+          selectedProfile = newValue.first
+        }
       }
     }
     .onChange(of: scenePhase) { oldPhase, newPhase in
@@ -207,6 +221,20 @@ struct HomeView: View {
     .sheet(isPresented: $showEmergencyView) {
       EmergencyView()
         .presentationDetents([.height(350)])
+    }
+    .sheet(isPresented: $showProfileModal) {
+      ProfileModalView(
+        profiles: profiles,
+        selectedProfile: $selectedProfile,
+        onEditProfile: { profile in
+          profileToEdit = profile
+          showProfileModal = false
+        },
+        onCreateProfile: {
+          showNewProfileView = true
+          showProfileModal = false
+        }
+      )
     }
     .alert(alertTitle, isPresented: $showingAlert) {
       Button("OK", role: .cancel) { dismissAlert() }
