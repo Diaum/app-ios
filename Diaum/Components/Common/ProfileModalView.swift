@@ -24,8 +24,8 @@ struct ProfileModalView: View {
           Spacer()
           
           Button(action: { dismiss() }) {
-            Text("Edit")
-              .font(.system(size: 16, weight: .regular, design: .monospaced))
+            Image(systemName: "xmark")
+              .font(.system(size: 18, weight: .medium, design: .monospaced))
               .foregroundColor(.black)
           }
           .accessibilityLabel("Close")
@@ -60,7 +60,7 @@ struct ProfileModalView: View {
                     .padding(.vertical, 14)
                     .background(
                       RoundedRectangle(cornerRadius: 8)
-                        .fill(Color(.systemGray6))
+                        .fill(Color(.systemGray5))
                     )
                 }
                 .buttonStyle(.plain)
@@ -69,25 +69,24 @@ struct ProfileModalView: View {
               }
             }
             
-            Spacer(minLength: 40)
-            
-            // Black ADD MODE Button at the bottom
-            Button(action: { onCreateProfile() }) {
-              Text("ADD MODE")
-                .font(.system(size: 16, weight: .semibold, design: .monospaced))
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(
-                  RoundedRectangle(cornerRadius: 12)
-                    .fill(.black)
-                )
-            }
-            .buttonStyle(.plain)
-            .padding(.horizontal, 20)
-            .padding(.bottom, 20)
           }
         }
+        
+        // Black ADD MODE Button at the very bottom
+        Button(action: { onCreateProfile() }) {
+          Text("ADD MODE")
+            .font(.system(size: 16, weight: .semibold, design: .monospaced))
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 16)
+            .background(
+              RoundedRectangle(cornerRadius: 12)
+                .fill(.black)
+            )
+        }
+        .buttonStyle(.plain)
+        .padding(.horizontal, 20)
+        .padding(.bottom, 20)
       }
       .background(Color.white)
     }
@@ -105,12 +104,24 @@ struct ProfileModalView: View {
   
   // MARK: - Empty State View
   private var emptyStateView: some View {
-    VStack(spacing: 20) {
-      Text("No modes created yet")
-        .font(.system(size: 16, weight: .regular, design: .monospaced))
+    VStack(spacing: 24) {
+      Image(systemName: "person.crop.circle.badge.plus")
+        .font(.system(size: 64, weight: .light, design: .monospaced))
         .foregroundColor(.gray)
-        .padding(.horizontal, 20)
+      
+      VStack(spacing: 8) {
+        Text("No modes created yet")
+          .font(.system(size: 18, weight: .semibold, design: .monospaced))
+          .foregroundColor(.black)
+        
+        Text("Create your first mode to start blocking distractions")
+          .font(.system(size: 14, design: .monospaced))
+          .foregroundColor(.gray)
+          .multilineTextAlignment(.center)
+      }
     }
+    .padding(.horizontal, 20)
+    .padding(.vertical, 40)
   }
   
   // MARK: - Modes List View
@@ -123,6 +134,7 @@ struct ProfileModalView: View {
           onSelect: {
             selectedProfile = profile
           },
+          onEdit: { onEditProfile(profile) },
           onDelete: {
             profileToDelete = profile
             showingDeleteAlert = true
@@ -150,7 +162,11 @@ struct ModeRowView: View {
   let profile: BlockedProfiles
   let isSelected: Bool
   let onSelect: () -> Void
+  let onEdit: () -> Void
   let onDelete: () -> Void
+  
+  @State private var longPressProgress: Double = 0.0
+  @State private var isLongPressing = false
   
   var body: some View {
     HStack {
@@ -177,12 +193,50 @@ struct ModeRowView: View {
     }
     .padding(.horizontal, 20)
     .padding(.vertical, 16)
+    .background(
+      ZStack {
+        // Long press progress indicator
+        if isLongPressing {
+          Rectangle()
+            .fill(Color.blue.opacity(0.1))
+            .frame(width: UIScreen.main.bounds.width * longPressProgress)
+            .animation(.linear(duration: 0.1), value: longPressProgress)
+        }
+      }
+    )
     .contentShape(Rectangle())
     .onTapGesture {
       onSelect()
     }
+    .onLongPressGesture(minimumDuration: 3.0, maximumDistance: 50) {
+      onEdit()
+    } onPressingChanged: { pressing in
+      if pressing {
+        startLongPress()
+      } else {
+        cancelLongPress()
+      }
+    }
     .accessibilityElement(children: .combine)
     .accessibilityAddTraits(isSelected ? .isSelected : [])
+  }
+  
+  private func startLongPress() {
+    isLongPressing = true
+    longPressProgress = 0.0
+    
+    Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+      longPressProgress += 0.033 // 3 seconds total
+      if longPressProgress >= 1.0 {
+        timer.invalidate()
+        isLongPressing = false
+      }
+    }
+  }
+  
+  private func cancelLongPress() {
+    isLongPressing = false
+    longPressProgress = 0.0
   }
 }
 
