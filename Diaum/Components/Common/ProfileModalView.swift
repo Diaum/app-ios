@@ -6,69 +6,63 @@ struct ProfileModalView: View {
   @Binding var selectedProfile: BlockedProfiles?
   let onEditProfile: (BlockedProfiles) -> Void
   let onCreateProfile: () -> Void
+  let onDeleteProfile: (BlockedProfiles) -> Void
   
   @Environment(\.dismiss) private var dismiss
+  @State private var profileToDelete: BlockedProfiles?
+  @State private var showingDeleteAlert = false
   
   var body: some View {
     NavigationView {
       VStack(spacing: 0) {
-        // Header
+        // Compact Header
         HStack {
-          Button(action: {
-            dismiss()
-          }) {
-            Image(systemName: "chevron.left")
-              .font(.system(.title2, design: .monospaced))
+          Button(action: { dismiss() }) {
+            Image(systemName: "xmark")
+              .font(.system(.title3, design: .monospaced))
               .foregroundColor(.primary)
           }
           
           Spacer()
           
           Text("SELECT PROFILE")
-            .font(.system(.headline, design: .monospaced))
+            .font(.system(.subheadline, design: .monospaced))
             .fontWeight(.bold)
             .foregroundColor(.primary)
           
           Spacer()
           
-          Button(action: {
-            onCreateProfile()
-          }) {
+          Button(action: { onCreateProfile() }) {
             Image(systemName: "plus")
-              .font(.system(.title2, design: .monospaced))
+              .font(.system(.title3, design: .monospaced))
               .foregroundColor(.primary)
           }
         }
         .padding(.horizontal, 20)
-        .padding(.top, 20)
+        .padding(.vertical, 12)
         
-        // Profile List
+        Divider()
+        
+        // Compact Profile List
         if profiles.isEmpty {
           VStack(spacing: 16) {
             Spacer()
             
             Image(systemName: "person.crop.circle.badge.plus")
-              .font(.system(.largeTitle, design: .monospaced))
+              .font(.system(.title, design: .monospaced))
               .foregroundColor(.gray)
             
             Text("No profiles yet")
-              .font(.system(.headline, design: .monospaced))
-              .foregroundColor(.secondary)
-            
-            Text("Create your first profile to get started")
               .font(.system(.subheadline, design: .monospaced))
               .foregroundColor(.secondary)
-              .multilineTextAlignment(.center)
             
-            Button(action: {
-              onCreateProfile()
-            }) {
+            Button(action: { onCreateProfile() }) {
               Text("CREATE PROFILE")
-                .font(.system(.headline, design: .monospaced))
+                .font(.system(.subheadline, design: .monospaced))
                 .fontWeight(.bold)
                 .foregroundColor(.white)
-                .padding(.horizontal, 24)
-                .padding(.vertical, 12)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 10)
                 .background(
                   RoundedRectangle(cornerRadius: 8)
                     .fill(Color.gray)
@@ -77,50 +71,80 @@ struct ProfileModalView: View {
             
             Spacer()
           }
+          .padding(.horizontal, 20)
         } else {
-          List {
-            ForEach(profiles) { profile in
-              HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                  Text(profile.name)
-                    .font(.system(.headline, design: .monospaced))
-                    .fontWeight(.medium)
-                    .foregroundColor(.primary)
+          ScrollView {
+            LazyVStack(spacing: 8) {
+              ForEach(profiles) { profile in
+                HStack {
+                  VStack(alignment: .leading, spacing: 2) {
+                    Text(profile.name)
+                      .font(.system(.subheadline, design: .monospaced))
+                      .fontWeight(.medium)
+                      .foregroundColor(.primary)
+                    
+                    Text("\(FamilyActivityUtil.countSelectedActivities(profile.selectedActivity)) apps")
+                      .font(.system(.caption2, design: .monospaced))
+                      .foregroundColor(.secondary)
+                  }
                   
-                  Text("\(FamilyActivityUtil.countSelectedActivities(profile.selectedActivity)) apps selected")
-                    .font(.system(.caption, design: .monospaced))
-                    .foregroundColor(.secondary)
+                  Spacer()
+                  
+                  if selectedProfile?.id == profile.id {
+                    Image(systemName: "checkmark.circle.fill")
+                      .font(.system(.title3, design: .monospaced))
+                      .foregroundColor(.blue)
+                  }
+                  
+                  HStack(spacing: 8) {
+                    Button(action: { onEditProfile(profile) }) {
+                      Image(systemName: "pencil")
+                        .font(.system(.caption, design: .monospaced))
+                        .foregroundColor(.secondary)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    
+                    Button(action: {
+                      profileToDelete = profile
+                      showingDeleteAlert = true
+                    }) {
+                      Image(systemName: "trash")
+                        .font(.system(.caption, design: .monospaced))
+                        .foregroundColor(.red)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                  }
                 }
-                
-                Spacer()
-                
-                if selectedProfile?.id == profile.id {
-                  Image(systemName: "checkmark")
-                    .font(.system(.title3, design: .monospaced))
-                    .foregroundColor(.primary)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(
+                  RoundedRectangle(cornerRadius: 8)
+                    .fill(Color(.systemGray6))
+                )
+                .contentShape(Rectangle())
+                .onTapGesture {
+                  selectedProfile = profile
+                  dismiss()
                 }
-                
-                Button(action: {
-                  onEditProfile(profile)
-                }) {
-                  Image(systemName: "pencil")
-                    .font(.system(.title3, design: .monospaced))
-                    .foregroundColor(.secondary)
-                }
-                .buttonStyle(PlainButtonStyle())
-              }
-              .padding(.vertical, 8)
-              .contentShape(Rectangle())
-              .onTapGesture {
-                selectedProfile = profile
-                dismiss()
               }
             }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
           }
-          .listStyle(PlainListStyle())
         }
       }
       .navigationBarHidden(true)
+    }
+    .presentationDetents([.height(400)])
+    .alert("Delete Profile", isPresented: $showingDeleteAlert) {
+      Button("Cancel", role: .cancel) { }
+      Button("Delete", role: .destructive) {
+        if let profile = profileToDelete {
+          onDeleteProfile(profile)
+        }
+      }
+    } message: {
+      Text("Are you sure you want to delete '\(profileToDelete?.name ?? "")'? This action cannot be undone.")
     }
   }
 }
@@ -133,6 +157,7 @@ struct ProfileModalView: View {
     ],
     selectedProfile: .constant(nil),
     onEditProfile: { _ in },
-    onCreateProfile: {}
+    onCreateProfile: {},
+    onDeleteProfile: { _ in }
   )
 }

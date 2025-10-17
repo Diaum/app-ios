@@ -57,6 +57,31 @@ struct HomeView: View {
   var isBreakActive: Bool {
     return strategyManager.isBreakActive
   }
+  
+  // Computed properties for profile button colors
+  private var profileButtonTextColor: Color {
+    if isBlocking {
+      return .gray.opacity(0.6)
+    } else {
+      return .black.opacity(0.8)
+    }
+  }
+  
+  private var profileButtonStrokeColor: Color {
+    if isBlocking {
+      return .gray.opacity(0.3)
+    } else {
+      return .black.opacity(0.4)
+    }
+  }
+  
+  private var profileButtonFillColor: Color {
+    if isBlocking {
+      return .gray.opacity(0.1)
+    } else {
+      return .white.opacity(0.2)
+    }
+  }
 
   var body: some View {
     ZStack {
@@ -147,24 +172,27 @@ struct HomeView: View {
           
           // Label Below Button - Profile Name (Clickable)
           Button(action: {
-            showProfileModal = true
+            if !isBlocking {
+              showProfileModal = true
+            }
           }) {
             Text(selectedProfile?.name ?? "MODE")
               .font(.system(size: 14, weight: .medium, design: .monospaced))
-              .foregroundColor(isBlocking ? .white.opacity(0.8) : .black.opacity(0.8))
+              .foregroundColor(profileButtonTextColor)
               .padding(.horizontal, 20)
               .padding(.vertical, 10)
               .background(
                 RoundedRectangle(cornerRadius: 16)
-                  .stroke(isBlocking ? Color.white.opacity(0.4) : Color.black.opacity(0.4), lineWidth: 2)
+                  .stroke(profileButtonStrokeColor, lineWidth: 2)
                   .background(
                     RoundedRectangle(cornerRadius: 16)
-                      .fill(isBlocking ? Color.black.opacity(0.2) : Color.white.opacity(0.2))
+                      .fill(profileButtonFillColor)
                   )
               )
               .animation(.easeInOut(duration: 0.3), value: isBlocking)
           }
           .buttonStyle(PlainButtonStyle())
+          .disabled(isBlocking)
           
           // Timer Counter - Always visible with different content
           VStack(spacing: 4) {
@@ -287,6 +315,10 @@ struct HomeView: View {
         onCreateProfile: {
           showNewProfileView = true
           showProfileModal = false
+        },
+        onDeleteProfile: { profile in
+          deleteProfile(profile)
+          showProfileModal = false
         }
       )
     }
@@ -327,6 +359,23 @@ struct HomeView: View {
   
   private func saveLastUsedProfile(_ profile: BlockedProfiles) {
     lastUsedProfileId = profile.id.uuidString
+  }
+  
+  private func deleteProfile(_ profile: BlockedProfiles) {
+    // If this was the selected profile, clear selection
+    if selectedProfile?.id == profile.id {
+      selectedProfile = nil
+    }
+    
+    // Delete from context
+    context.delete(profile)
+    
+    // Save context
+    do {
+      try context.save()
+    } catch {
+      print("Error deleting profile: \(error)")
+    }
   }
 
   private func unloadApp() {
