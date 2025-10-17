@@ -17,7 +17,7 @@ struct ProfileModalView: View {
   private var modalHeight: CGFloat {
     let baseHeight: CGFloat = 200 // Header + bottom button + padding
     let profileRowHeight: CGFloat = 60 // Each profile row height
-    let emptyStateHeight: CGFloat = 200 // Empty state height
+    let emptyStateHeight: CGFloat = 120 // Empty state height (reduced)
     
     if profiles.isEmpty {
       return max(400, baseHeight + emptyStateHeight)
@@ -112,24 +112,24 @@ struct ProfileModalView: View {
   
   // MARK: - Empty State View
   private var emptyStateView: some View {
-    VStack(spacing: 24) {
+    VStack(spacing: 16) {
       Image(systemName: "person.crop.circle.badge.plus")
-        .font(.system(size: 64, weight: .light, design: .monospaced))
+        .font(.system(size: 40, weight: .light, design: .monospaced))
         .foregroundColor(.gray)
       
-      VStack(spacing: 8) {
+      VStack(spacing: 6) {
         Text("No modes created yet")
-          .font(.system(size: 18, weight: .semibold, design: .monospaced))
+          .font(.system(size: 16, weight: .semibold, design: .monospaced))
           .foregroundColor(.black)
         
         Text("Create your first mode to start blocking distractions")
-          .font(.system(size: 14, design: .monospaced))
+          .font(.system(size: 12, design: .monospaced))
           .foregroundColor(.gray)
           .multilineTextAlignment(.center)
       }
     }
     .padding(.horizontal, 20)
-    .padding(.vertical, 40)
+    .padding(.vertical, 20)
   }
   
   // MARK: - Modes List View
