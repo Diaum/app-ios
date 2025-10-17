@@ -60,9 +60,10 @@ struct HomeView: View {
 
   var body: some View {
     ZStack {
-      // Background - Dark gradient/solid color (#121212)
-      Color(red: 0.07, green: 0.07, blue: 0.07) // #121212
+      // Background - Dynamic theme
+      Color(isBlocking ? Color(red: 0.07, green: 0.07, blue: 0.07) : Color.white)
         .ignoresSafeArea()
+        .animation(.easeInOut(duration: 0.3), value: isBlocking)
       
       VStack(spacing: 0) {
         Spacer()
@@ -72,8 +73,9 @@ struct HomeView: View {
           // Label Above Button - Always visible
           Text(isBlocking ? "TAP TO UNBRICK" : "TAP TO BRICK")
             .font(.system(size: 16, weight: .regular, design: .monospaced))
-            .foregroundColor(.white)
+            .foregroundColor(isBlocking ? .white : .black)
             .multilineTextAlignment(.center)
+            .animation(.easeInOut(duration: 0.3), value: isBlocking)
           
           // Main BRICK Button
           Button(action: {
@@ -98,9 +100,12 @@ struct HomeView: View {
               RoundedRectangle(cornerRadius: 16)
                 .fill(
                   LinearGradient(
-                    gradient: Gradient(colors: [
-                      Color(red: 0.55, green: 0.55, blue: 0.62), // Lighter top
-                      Color(red: 0.42, green: 0.42, blue: 0.48)  // Darker bottom
+                    gradient: Gradient(colors: isBlocking ? [
+                      Color(red: 0.55, green: 0.55, blue: 0.62), // Dark theme
+                      Color(red: 0.42, green: 0.42, blue: 0.48)
+                    ] : [
+                      Color(red: 0.85, green: 0.85, blue: 0.90), // Light theme
+                      Color(red: 0.75, green: 0.75, blue: 0.80)
                     ]),
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
@@ -111,10 +116,14 @@ struct HomeView: View {
                   RoundedRectangle(cornerRadius: 16)
                     .stroke(
                       LinearGradient(
-                        gradient: Gradient(colors: [
+                        gradient: Gradient(colors: isBlocking ? [
                           Color.white.opacity(0.3),
                           Color.clear,
                           Color.black.opacity(0.2)
+                        ] : [
+                          Color.black.opacity(0.2),
+                          Color.clear,
+                          Color.white.opacity(0.3)
                         ]),
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
@@ -122,14 +131,16 @@ struct HomeView: View {
                       lineWidth: 1
                     )
                 )
-                .shadow(color: .black.opacity(0.3), radius: 8, x: 0, y: 4)
-                .shadow(color: .white.opacity(0.1), radius: 2, x: 0, y: -1)
+                .shadow(color: isBlocking ? .black.opacity(0.3) : .black.opacity(0.2), radius: 8, x: 0, y: 4)
+                .shadow(color: isBlocking ? .white.opacity(0.1) : .white.opacity(0.3), radius: 2, x: 0, y: -1)
+                .animation(.easeInOut(duration: 0.3), value: isBlocking)
               
               // Button text
               Text("BRICK")
                 .font(.system(size: 18, weight: .medium, design: .monospaced))
-                .foregroundColor(.white)
-                .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
+                .foregroundColor(isBlocking ? .white : .black)
+                .shadow(color: isBlocking ? .black.opacity(0.5) : .white.opacity(0.5), radius: 1, x: 0, y: 1)
+                .animation(.easeInOut(duration: 0.3), value: isBlocking)
             }
           }
           .buttonStyle(PlainButtonStyle())
@@ -140,17 +151,18 @@ struct HomeView: View {
           }) {
             Text(selectedProfile?.name ?? "MODE")
               .font(.system(size: 14, weight: .medium, design: .monospaced))
-              .foregroundColor(.white.opacity(0.8))
+              .foregroundColor(isBlocking ? .white.opacity(0.8) : .black.opacity(0.8))
               .padding(.horizontal, 20)
               .padding(.vertical, 10)
               .background(
                 RoundedRectangle(cornerRadius: 16)
-                  .stroke(Color.white.opacity(0.4), lineWidth: 2)
+                  .stroke(isBlocking ? Color.white.opacity(0.4) : Color.black.opacity(0.4), lineWidth: 2)
                   .background(
                     RoundedRectangle(cornerRadius: 16)
-                      .fill(Color.black.opacity(0.2))
+                      .fill(isBlocking ? Color.black.opacity(0.2) : Color.white.opacity(0.2))
                   )
               )
+              .animation(.easeInOut(duration: 0.3), value: isBlocking)
           }
           .buttonStyle(PlainButtonStyle())
           
@@ -167,13 +179,14 @@ struct HomeView: View {
             } else {
               Text("TOTAL BLOCKED TODAY")
                 .font(.system(size: 12, weight: .regular, design: .monospaced))
-                .foregroundColor(.white.opacity(0.6))
+                .foregroundColor(.black.opacity(0.6))
               
               Text(formatElapsedTime(getDailyBlockedTime()))
                 .font(.system(size: 12, weight: .regular, design: .monospaced))
-                .foregroundColor(.white.opacity(0.6))
+                .foregroundColor(.black.opacity(0.6))
             }
           }
+          .animation(.easeInOut(duration: 0.3), value: isBlocking)
         }
         
         Spacer()
