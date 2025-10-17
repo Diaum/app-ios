@@ -91,7 +91,7 @@ struct HomeView: View {
         .animation(.easeInOut(duration: 0.3), value: isBlocking)
       
       VStack(spacing: 0) {
-        Spacer()
+          Spacer()
         
         // Main Content - Centered vertically and horizontally
         VStack(spacing: 16) {
