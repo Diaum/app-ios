@@ -145,14 +145,22 @@ struct HomeView: View {
           }
           .buttonStyle(PlainButtonStyle())
           
-          // Timer Counter - Only when blocking
-          if isBlocking {
-            VStack(spacing: 4) {
+          // Timer Counter - Always visible with different content
+          VStack(spacing: 4) {
+            if isBlocking {
               Text("YOU'VE BEEN BRICKED FOR")
                 .font(.system(size: 12, weight: .regular, design: .monospaced))
                 .foregroundColor(.white.opacity(0.6))
               
               Text(formatElapsedTime(strategyManager.elapsedTime))
+                .font(.system(size: 12, weight: .regular, design: .monospaced))
+                .foregroundColor(.white.opacity(0.6))
+            } else {
+              Text("TOTAL BLOCKED TODAY")
+                .font(.system(size: 12, weight: .regular, design: .monospaced))
+                .foregroundColor(.white.opacity(0.6))
+              
+              Text(formatElapsedTime(getDailyBlockedTime()))
                 .font(.system(size: 12, weight: .regular, design: .monospaced))
                 .foregroundColor(.white.opacity(0.6))
             }
@@ -342,6 +350,30 @@ struct HomeView: View {
     } else {
       return String(format: "%02d:%02d", minutes, seconds)
     }
+  }
+  
+  private func getDailyBlockedTime() -> TimeInterval {
+    let calendar = Calendar.current
+    let today = Date()
+    let startOfDay = calendar.startOfDay(for: today)
+    let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+    
+    var totalTime: TimeInterval = 0
+    
+    for profile in profiles {
+      let todaySessions = profile.sessions.filter { session in
+        guard let endTime = session.endTime else { return false }
+        return session.startTime >= startOfDay && endTime < endOfDay
+      }
+      
+      for session in todaySessions {
+        if let endTime = session.endTime {
+          totalTime += endTime.timeIntervalSince(session.startTime)
+        }
+      }
+    }
+    
+    return totalTime
   }
 }
 
