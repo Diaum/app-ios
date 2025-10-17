@@ -15,10 +15,10 @@ struct StrategyRow: View {
 
         VStack(alignment: .leading, spacing: 4) {
           Text(strategy.name)
-            .font(.headline)
+            .font(.system(size: 16, weight: .semibold, design: .monospaced))
 
           Text(strategy.description)
-            .font(.subheadline)
+            .font(.system(size: 14, weight: .regular, design: .monospaced))
             .foregroundColor(.secondary)
             .lineLimit(3)
         }

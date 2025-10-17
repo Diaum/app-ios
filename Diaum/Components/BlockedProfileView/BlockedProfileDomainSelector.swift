@@ -25,6 +25,7 @@ struct BlockedProfileDomainSelector: View {
     Button(action: buttonAction) {
       HStack {
         Text(buttonText)
+          .font(.system(size: 16, weight: .regular, design: .monospaced))
         Spacer()
         Image(systemName: "chevron.right")
           .foregroundStyle(.gray)
@@ -36,13 +37,14 @@ struct BlockedProfileDomainSelector: View {
       Text(disabledText)
         .foregroundStyle(.red)
         .padding(.top, 4)
-        .font(.caption)
+        .font(.system(size: 12, weight: .regular, design: .monospaced))
     } else if domainCount == 0 {
       Text("No domains selected")
+        .font(.system(size: 14, weight: .regular, design: .monospaced))
         .foregroundStyle(.gray)
     } else {
       Text("\(domainCount) \(domainCount == 1 ? "domain" : "domains") selected")
-        .font(.footnote)
+        .font(.system(size: 14, weight: .regular, design: .monospaced))
         .foregroundStyle(.gray)
         .padding(.top, 4)
     }

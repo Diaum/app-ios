@@ -14,6 +14,7 @@ struct BlockedProfileScheduleSelector: View {
     Button(action: buttonAction) {
       HStack {
         Text(buttonText)
+          .font(.system(size: 16, weight: .regular, design: .monospaced))
         Spacer()
         Image(systemName: "chevron.right")
           .foregroundStyle(.gray)
@@ -25,13 +26,14 @@ struct BlockedProfileScheduleSelector: View {
       Text(disabledText)
         .foregroundStyle(.red)
         .padding(.top, 4)
-        .font(.caption)
+        .font(.system(size: 12, weight: .regular, design: .monospaced))
     } else if daysCount == 0 {
       Text("No schedule set")
+        .font(.system(size: 14, weight: .regular, design: .monospaced))
         .foregroundStyle(.gray)
     } else {
       Text(schedule.summaryText)
-        .font(.footnote)
+        .font(.system(size: 14, weight: .regular, design: .monospaced))
         .foregroundStyle(.gray)
         .padding(.top, 4)
     }

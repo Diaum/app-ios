@@ -35,6 +35,7 @@ struct BlockedProfileAppSelector: View {
     Button(action: buttonAction) {
       HStack {
         Text(buttonText)
+          .font(.system(size: 16, weight: .regular, design: .monospaced))
         Spacer()
         Image(systemName: "chevron.right")
           .foregroundStyle(.gray)
@@ -46,19 +47,20 @@ struct BlockedProfileAppSelector: View {
       Text(disabledText)
         .foregroundStyle(.red)
         .padding(.top, 4)
-        .font(.caption)
+        .font(.system(size: 12, weight: .regular, design: .monospaced))
     } else if catAndAppCount == 0 {
       Text("No apps or websites selected")
+        .font(.system(size: 14, weight: .regular, design: .monospaced))
         .foregroundStyle(.gray)
     } else {
       VStack(alignment: .leading, spacing: 4) {
         Text("\(countDisplayText) selected")
-          .font(.footnote)
+          .font(.system(size: 14, weight: .regular, design: .monospaced))
           .foregroundStyle(.gray)
 
         if shouldShowWarning {
           Text("⚠️ Categories expand to individual apps in Allow mode")
-            .font(.caption)
+            .font(.system(size: 12, weight: .regular, design: .monospaced))
             .foregroundColor(.orange)
         }
       }

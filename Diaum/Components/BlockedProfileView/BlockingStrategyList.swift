@@ -28,7 +28,7 @@ struct BlockingStrategyList: View {
           Text(disabledText)
             .foregroundStyle(.red)
             .padding(.top, 4)
-            .font(.caption)
+            .font(.system(size: 12, weight: .regular, design: .monospaced))
         }
       }.padding(0)
     }
