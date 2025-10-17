@@ -38,6 +38,9 @@ struct HomeView: View {
 
   // UI States
   @State private var opacityValue = 1.0
+  @State private var emergencyProgress: Double = 0.0
+  @State private var emergencyStopTimer: Timer?
+  @State private var isEmergencyStopActive = false
 
   var isBlocking: Bool {
     return strategyManager.isBlocking
@@ -91,19 +94,44 @@ struct HomeView: View {
               }
             }
           }) {
-            Text("BRICK")
-              .font(.system(size: 18, weight: .regular, design: .monospaced))
-              .foregroundColor(.white)
-              .frame(width: 120, height: 120)
-              .background(
-                RoundedRectangle(cornerRadius: 12)
-                  .fill(Color(red: 0.48, green: 0.48, blue: 0.55)) // #7B7B8C
-                  .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
-              )
+            ZStack {
+              // Button background
+              RoundedRectangle(cornerRadius: 12)
+                .fill(Color(red: 0.48, green: 0.48, blue: 0.55)) // #7B7B8C
+                .frame(width: 120, height: 120)
+                .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
+              
+              // Emergency progress bar (red, growing from bottom to top)
+              if isEmergencyStopActive {
+                VStack {
+                  Spacer()
+                  RoundedRectangle(cornerRadius: 12)
+                    .fill(Color.red.opacity(0.3))
+                    .frame(width: 120, height: 120 * emergencyProgress)
+                    .animation(.linear(duration: 0.1), value: emergencyProgress)
+                }
+              }
+              
+              // Button text
+              Text("BRICK")
+                .font(.system(size: 18, weight: .regular, design: .monospaced))
+                .foregroundColor(.white)
+                .zIndex(1) // Ensure text stays on top
+            }
           }
           .buttonStyle(PlainButtonStyle())
           .scaleEffect(isBlocking ? 1.0 : 1.0)
           .animation(.easeInOut(duration: 0.2), value: isBlocking)
+          .onLongPressGesture(minimumDuration: 2.0, maximumDistance: 50) {
+            // Emergency stop - force stop any active session
+            emergencyStop()
+          } onPressingChanged: { pressing in
+            if pressing {
+              startEmergencyStopTimer()
+            } else {
+              cancelEmergencyStopTimer()
+            }
+          }
           
           // Label Below Button - "DEFAULT" or Profile Name (Clickable)
           Button(action: {
@@ -273,6 +301,41 @@ struct HomeView: View {
 
   private func dismissAlert() {
     showingAlert = false
+  }
+  
+  // Emergency Stop Functions
+  private func emergencyStop() {
+    // Force stop any active session immediately
+    if isBlocking {
+      if let activeProfile = strategyManager.activeSession?.blockedProfile {
+        strategyManager.toggleBlocking(context: context, activeProfile: activeProfile)
+      }
+    }
+    // Clear any timers and reset progress
+    cancelEmergencyStopTimer()
+    emergencyProgress = 0.0
+    isEmergencyStopActive = false
+  }
+  
+  private func startEmergencyStopTimer() {
+    cancelEmergencyStopTimer() // Cancel any existing timer
+    isEmergencyStopActive = true
+    emergencyProgress = 0.0
+    
+    // Start progress animation
+    emergencyStopTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
+      emergencyProgress += 0.025 // 2 seconds total (0.05 * 40 = 2.0)
+      if emergencyProgress >= 1.0 {
+        emergencyStop()
+      }
+    }
+  }
+  
+  private func cancelEmergencyStopTimer() {
+    emergencyStopTimer?.invalidate()
+    emergencyStopTimer = nil
+    isEmergencyStopActive = false
+    emergencyProgress = 0.0
   }
   
   private func formatElapsedTime(_ timeInterval: TimeInterval) -> String {
