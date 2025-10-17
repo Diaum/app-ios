@@ -13,6 +13,20 @@ struct ProfileModalView: View {
   @State private var showingDeleteAlert = false
   @State private var isDeleteModeActive = false
   
+  // Dynamic height calculation
+  private var modalHeight: CGFloat {
+    let baseHeight: CGFloat = 200 // Header + bottom button + padding
+    let profileRowHeight: CGFloat = 60 // Each profile row height
+    let emptyStateHeight: CGFloat = 200 // Empty state height
+    
+    if profiles.isEmpty {
+      return max(400, baseHeight + emptyStateHeight)
+    } else {
+      let contentHeight = baseHeight + (CGFloat(profiles.count) * profileRowHeight)
+      return max(400, min(contentHeight, 600)) // Min 400, Max 600
+    }
+  }
+  
   var body: some View {
     NavigationStack {
       VStack(spacing: 0) {
@@ -91,6 +105,9 @@ struct ProfileModalView: View {
     } message: {
       Text("Are you sure you want to delete '\(profileToDelete?.name ?? "")'? This action cannot be undone.")
     }
+    .presentationDetents([.height(modalHeight)])
+    .presentationDragIndicator(.visible)
+    .presentationBackground(.regularMaterial)
   }
   
   // MARK: - Empty State View
