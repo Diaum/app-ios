@@ -25,8 +25,6 @@ struct NewModeModal: View {
     @State private var disableBackgroundStops: Bool = false
     @State private var domains: [String] = []
     
-    @State private var physicalUnblockNFCTagId: String?
-    @State private var physicalUnblockQRCodeId: String?
     
     @State private var schedule: BlockedProfileSchedule
     
@@ -46,8 +44,6 @@ struct NewModeModal: View {
     @State private var errorMessage: String?
     @State private var showError = false
     
-    // Sheet for physical unblock
-    @State private var showingPhysicalUnblockView = false
     
     // Alert for cloning
     @State private var showingClonePrompt = false
@@ -59,7 +55,6 @@ struct NewModeModal: View {
     @State private var selectedActivity = FamilyActivitySelection()
     @State private var selectedStrategy: BlockingStrategy? = nil
     
-    private let physicalReader: PhysicalReader = PhysicalReader()
     
     init(onProfileCreated: ((BlockedProfiles) -> Void)? = nil) {
         self.onProfileCreated = onProfileCreated
@@ -97,12 +92,6 @@ struct NewModeModal: View {
         _domains = State(
             initialValue: []
         )
-        _physicalUnblockNFCTagId = State(
-            initialValue: nil
-        )
-        _physicalUnblockQRCodeId = State(
-            initialValue: nil
-        )
         _schedule = State(
             initialValue: BlockedProfileSchedule(
                 days: [],
@@ -114,7 +103,7 @@ struct NewModeModal: View {
             )
         )
         
-        _selectedStrategy = State(initialValue: NFCBlockingStrategy())
+        _selectedStrategy = State(initialValue: ManualBlockingStrategy())
     }
     
     var body: some View {
@@ -124,14 +113,14 @@ struct NewModeModal: View {
                 HStack {
                     Text("NEW MODE")
                         .font(.system(size: 32, weight: .bold, design: .monospaced))
-                        .foregroundColor(.black)
+                        .foregroundColor(.primary)
                     
                     Spacer()
                     
                     Button(action: { dismiss() }) {
                         Image(systemName: "xmark")
                             .font(.system(size: 18, weight: .medium, design: .monospaced))
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                     }
                     .accessibilityLabel("Cancel")
                 }
@@ -144,7 +133,7 @@ struct NewModeModal: View {
                     Section {
                         Text("NAME")
                             .font(.system(size: 12, weight: .regular, design: .monospaced))
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                             .padding(.horizontal, 20)
                         
                         TextField("Profile Name", text: $name)
@@ -159,22 +148,9 @@ struct NewModeModal: View {
                     }
                     
                     Section {
-                        Text("BLOCKING STRATEGY")
-                            .font(.system(size: 12, weight: .regular, design: .monospaced))
-                            .foregroundColor(.black)
-                            .padding(.horizontal, 20)
-                        
-                        BlockingStrategyList(
-                            strategies: StrategyManager.availableStrategies,
-                            selectedStrategy: $selectedStrategy,
-                            disabled: false
-                        )
-                    }
-                    
-                    Section {
                         Text(enableAllowMode ? "ALLOWED" : "BLOCKED" + " APPS & WEBSITES")
                             .font(.system(size: 12, weight: .regular, design: .monospaced))
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                             .padding(.horizontal, 20)
                         
                         BlockedProfileAppSelector(
@@ -196,7 +172,7 @@ struct NewModeModal: View {
                     Section {
                         Text(enableAllowModeDomain ? "ALLOWED" : "BLOCKED" + " DOMAINS")
                             .font(.system(size: 12, weight: .regular, design: .monospaced))
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                             .padding(.horizontal, 20)
                         
                         BlockedProfileDomainSelector(
@@ -218,7 +194,7 @@ struct NewModeModal: View {
                     Section {
                         Text("SCHEDULE")
                             .font(.system(size: 12, weight: .regular, design: .monospaced))
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                             .padding(.horizontal, 20)
                         
                         BlockedProfileScheduleSelector(
@@ -231,7 +207,7 @@ struct NewModeModal: View {
                     Section {
                         Text("SAFEGUARDS")
                             .font(.system(size: 12, weight: .regular, design: .monospaced))
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                             .padding(.horizontal, 20)
                         
                         CustomToggle(
@@ -260,32 +236,9 @@ struct NewModeModal: View {
                     }
                     
                     Section {
-                        Text("STRICT UNLOCKS")
-                            .font(.system(size: 12, weight: .regular, design: .monospaced))
-                            .foregroundColor(.black)
-                            .padding(.horizontal, 20)
-                        
-                        BlockedProfilePhysicalUnblockSelector(
-                            nfcTagId: physicalUnblockNFCTagId,
-                            qrCodeId: physicalUnblockQRCodeId,
-                            disabled: false,
-                            onSetNFC: {
-                                physicalReader.readNFCTag(
-                                    onSuccess: { physicalUnblockNFCTagId = $0 },
-                                )
-                            },
-                            onSetQRCode: {
-                                showingPhysicalUnblockView = true
-                            },
-                            onUnsetNFC: { physicalUnblockNFCTagId = nil },
-                            onUnsetQRCode: { physicalUnblockQRCodeId = nil }
-                        )
-                    }
-                    
-                    Section {
                         Text("NOTIFICATIONS")
                             .font(.system(size: 12, weight: .regular, design: .monospaced))
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                             .padding(.horizontal, 20)
                         
                         CustomToggle(
@@ -379,7 +332,7 @@ struct NewModeModal: View {
                         Button(action: { dismiss() }) {
                             Text("CANCEL")
                                 .font(.system(size: 16, weight: .regular, design: .monospaced))
-                                .foregroundColor(.gray)
+                                .foregroundColor(.secondary)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 14)
                                 .background(
@@ -395,10 +348,11 @@ struct NewModeModal: View {
                     // Small message at the bottom
                     Text("Enter mode name and configure settings")
                         .font(.system(size: 10, weight: .regular, design: .monospaced))
-                        .foregroundColor(.gray.opacity(0.6))
+                        .foregroundColor(.secondary)
                         .padding(.bottom, 20)
                 }
                 .background(Color.white)
+                .preferredColorScheme(.light)
                 .onChange(of: enableAllowMode) {
                     _,
                     newValue in
@@ -424,22 +378,6 @@ struct NewModeModal: View {
                     SchedulePicker(
                         schedule: $schedule,
                         isPresented: $showingSchedulePicker
-                    )
-                }
-                .sheet(isPresented: $showingPhysicalUnblockView) {
-                    BlockingStrategyActionView(
-                        customView: physicalReader.readQRCode(
-                            onSuccess: {
-                                showingPhysicalUnblockView = false
-                                physicalUnblockQRCodeId = $0
-                            },
-                            onFailure: { _ in
-                                showingPhysicalUnblockView = false
-                                self.showError(
-                                    message: "Failed to read QR code, please try again or use a different QR code."
-                                )
-                            }
-                        )
                     )
                 }
                 .alert("Error", isPresented: $showError) {
@@ -469,8 +407,7 @@ struct NewModeModal: View {
                     in: modelContext,
                     name: name,
                     selection: selectedActivity,
-                    blockingStrategyId: selectedStrategy?
-                        .getIdentifier() ?? NFCBlockingStrategy.id,
+                    blockingStrategyId: ManualBlockingStrategy.id,
                     enableLiveActivity: enableLiveActivity,
                     reminderTimeInSeconds: reminderTimeSeconds,
                     customReminderMessage: customReminderMessage,
@@ -479,8 +416,8 @@ struct NewModeModal: View {
                     enableAllowMode: enableAllowMode,
                     enableAllowModeDomains: enableAllowModeDomain,
                     domains: domains,
-                    physicalUnblockNFCTagId: physicalUnblockNFCTagId,
-                    physicalUnblockQRCodeId: physicalUnblockQRCodeId,
+                    physicalUnblockNFCTagId: nil,
+                    physicalUnblockQRCodeId: nil,
                     schedule: schedule,
                     disableBackgroundStops: disableBackgroundStops
                 )
@@ -499,10 +436,11 @@ struct NewModeModal: View {
          }
      }
  
- // Preview provider for SwiftUI previews
- #Preview {
-     NewModeModal()
-         .environmentObject(NFCWriter())
-         .environmentObject(StrategyManager())
-         .modelContainer(for: BlockedProfiles.self, inMemory: true)
- }
+    // Preview provider for SwiftUI previews
+    #Preview {
+        NewModeModal()
+            .environmentObject(NFCWriter())
+            .environmentObject(StrategyManager())
+            .modelContainer(for: BlockedProfiles.self, inMemory: true)
+            .preferredColorScheme(.light)
+    }
