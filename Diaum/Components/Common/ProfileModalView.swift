@@ -11,6 +11,7 @@ struct ProfileModalView: View {
   @Environment(\.dismiss) private var dismiss
   @State private var profileToDelete: BlockedProfiles?
   @State private var showingDeleteAlert = false
+  @State private var isDeleteModeActive = false
   
   var body: some View {
     NavigationStack {
@@ -23,12 +24,14 @@ struct ProfileModalView: View {
           
           Spacer()
           
-          Button(action: { dismiss() }) {
-            Image(systemName: "xmark")
+          Button(action: { 
+            isDeleteModeActive.toggle()
+          }) {
+            Image(systemName: isDeleteModeActive ? "trash.fill" : "trash")
               .font(.system(size: 18, weight: .medium, design: .monospaced))
-              .foregroundColor(.black)
+              .foregroundColor(isDeleteModeActive ? .red : .black)
           }
-          .accessibilityLabel("Close")
+          .accessibilityLabel(isDeleteModeActive ? "Exit Delete Mode" : "Enter Delete Mode")
         }
         .padding(.horizontal, 20)
         .padding(.top, 20)
@@ -71,7 +74,7 @@ struct ProfileModalView: View {
         .padding(.bottom, 8)
         
         // Small message at the bottom
-        Text("Tap to edit • Hold to delete")
+        Text(isDeleteModeActive ? "Tap mode to delete" : "Tap to select • Gear to edit")
           .font(.system(size: 10, weight: .regular, design: .monospaced))
           .foregroundColor(.gray.opacity(0.6))
           .padding(.bottom, 20)
@@ -119,8 +122,10 @@ struct ProfileModalView: View {
         ModeRowView(
           profile: profile,
           isSelected: selectedProfile?.id == profile.id,
+          isDeleteModeActive: isDeleteModeActive,
           onSelect: {
             selectedProfile = profile
+            dismiss()
           },
           onEdit: { onEditProfile(profile) },
           onDelete: {
@@ -149,12 +154,10 @@ struct ProfileModalView: View {
 struct ModeRowView: View {
   let profile: BlockedProfiles
   let isSelected: Bool
+  let isDeleteModeActive: Bool
   let onSelect: () -> Void
   let onEdit: () -> Void
   let onDelete: () -> Void
-  
-  @State private var longPressProgress: Double = 0.0
-  @State private var isLongPressing = false
   
   var body: some View {
     HStack {
@@ -171,69 +174,32 @@ struct ModeRowView: View {
           .accessibilityLabel("Selected")
       }
       
-      // Selection button
-      Button(action: onSelect) {
-        Image(systemName: "circle")
-          .font(.system(size: 16, weight: .medium, design: .monospaced))
-          .foregroundColor(.gray)
-      }
-      .buttonStyle(.plain)
-      .accessibilityLabel("Select Mode")
+      Spacer()
       
-      Button(action: onDelete) {
-        Image(systemName: "trash")
+      // Edit button
+      Button(action: onEdit) {
+        Image(systemName: "gearshape")
           .font(.system(size: 14, weight: .medium, design: .monospaced))
           .foregroundColor(.gray)
       }
       .buttonStyle(.plain)
-      .accessibilityLabel("Delete Mode")
+      .accessibilityLabel("Edit Mode")
     }
     .padding(.horizontal, 20)
     .padding(.vertical, 16)
     .background(
-      ZStack {
-        // Long press progress indicator
-        if isLongPressing {
-          Rectangle()
-            .fill(Color.blue.opacity(0.1))
-            .frame(width: UIScreen.main.bounds.width * longPressProgress)
-            .animation(.linear(duration: 0.1), value: longPressProgress)
-        }
-      }
+      isDeleteModeActive ? Color.red.opacity(0.1) : Color.clear
     )
     .contentShape(Rectangle())
     .onTapGesture {
-      onEdit()
-    }
-    .onLongPressGesture(minimumDuration: 3.0, maximumDistance: 50) {
-      onDelete()
-    } onPressingChanged: { pressing in
-      if pressing {
-        startLongPress()
+      if isDeleteModeActive {
+        onDelete()
       } else {
-        cancelLongPress()
+        onSelect()
       }
     }
     .accessibilityElement(children: .combine)
     .accessibilityAddTraits(isSelected ? .isSelected : [])
-  }
-  
-  private func startLongPress() {
-    isLongPressing = true
-    longPressProgress = 0.0
-    
-    Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
-      longPressProgress += 0.033 // 3 seconds total
-      if longPressProgress >= 1.0 {
-        timer.invalidate()
-        isLongPressing = false
-      }
-    }
-  }
-  
-  private func cancelLongPress() {
-    isLongPressing = false
-    longPressProgress = 0.0
   }
 }
 
