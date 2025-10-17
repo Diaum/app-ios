@@ -12,6 +12,7 @@ struct ProfileModalView: View {
   @State private var profileToDelete: BlockedProfiles?
   @State private var showingDeleteAlert = false
   @State private var isDeleteModeActive = false
+  @State private var showingNewModeModal = false
   
   // Dynamic height calculation
   private var modalHeight: CGFloat {
@@ -72,7 +73,9 @@ struct ProfileModalView: View {
         }
         
         // Black ADD MODE Button at the very bottom
-        Button(action: { onCreateProfile() }) {
+        Button(action: { 
+          showingNewModeModal = true
+        }) {
           Text("ADD MODE")
             .font(.system(size: 16, weight: .semibold, design: .monospaced))
             .foregroundColor(.white)
@@ -108,6 +111,14 @@ struct ProfileModalView: View {
     .presentationDetents([.height(modalHeight)])
     .presentationDragIndicator(.visible)
     .presentationBackground(.regularMaterial)
+    .sheet(isPresented: $showingNewModeModal) {
+      NewModeModal(onProfileCreated: { newProfile in
+        // Chamar o callback original para notificar que um novo perfil foi criado
+        onCreateProfile()
+        // Fechar o ProfileModalView também
+        dismiss()
+      })
+    }
   }
   
   // MARK: - Empty State View
