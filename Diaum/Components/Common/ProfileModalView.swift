@@ -48,24 +48,6 @@ struct ProfileModalView: View {
                 emptyStateView
               } else {
                 modesListView
-                
-                // ANTIPORN Button below the list
-                Button(action: {
-                  // No logic for now, just the button
-                }) {
-                  Text("ANTIPORN")
-                    .font(.system(size: 16, weight: .regular, design: .monospaced))
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
-                    .background(
-                      RoundedRectangle(cornerRadius: 8)
-                        .fill(Color(.systemGray5))
-                    )
-                }
-                .buttonStyle(.plain)
-                .padding(.horizontal, 20)
-                .padding(.top, 20)
               }
             }
             
@@ -86,7 +68,13 @@ struct ProfileModalView: View {
         }
         .buttonStyle(.plain)
         .padding(.horizontal, 20)
-        .padding(.bottom, 20)
+        .padding(.bottom, 8)
+        
+        // Small message at the bottom
+        Text("Tap to edit • Hold to delete")
+          .font(.system(size: 10, weight: .regular, design: .monospaced))
+          .foregroundColor(.gray.opacity(0.6))
+          .padding(.bottom, 20)
       }
       .background(Color.white)
     }
@@ -183,6 +171,15 @@ struct ModeRowView: View {
           .accessibilityLabel("Selected")
       }
       
+      // Selection button
+      Button(action: onSelect) {
+        Image(systemName: "circle")
+          .font(.system(size: 16, weight: .medium, design: .monospaced))
+          .foregroundColor(.gray)
+      }
+      .buttonStyle(.plain)
+      .accessibilityLabel("Select Mode")
+      
       Button(action: onDelete) {
         Image(systemName: "trash")
           .font(.system(size: 14, weight: .medium, design: .monospaced))
@@ -206,10 +203,10 @@ struct ModeRowView: View {
     )
     .contentShape(Rectangle())
     .onTapGesture {
-      onSelect()
+      onEdit()
     }
     .onLongPressGesture(minimumDuration: 3.0, maximumDistance: 50) {
-      onEdit()
+      onDelete()
     } onPressingChanged: { pressing in
       if pressing {
         startLongPress()
