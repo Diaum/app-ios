@@ -160,6 +160,11 @@ struct BlockedProfileView: View {
         Section("Name") {
           TextField("Profile Name", text: $name)
             .textContentType(.none)
+            .onChange(of: name) { _, newValue in
+              if newValue.count > 25 {
+                name = String(newValue.prefix(25))
+              }
+            }
         }
 
         Section(enableAllowMode ? "Allowed" : "Blocked" + " Apps & Websites") {

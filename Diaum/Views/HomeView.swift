@@ -104,8 +104,8 @@ struct HomeView: View {
                       Color(red: 0.55, green: 0.55, blue: 0.62), // Dark theme
                       Color(red: 0.42, green: 0.42, blue: 0.48)
                     ] : [
-                      Color(red: 0.85, green: 0.85, blue: 0.90), // Light theme
-                      Color(red: 0.75, green: 0.75, blue: 0.80)
+                      Color(red: 0.15, green: 0.15, blue: 0.20), // Black when unlocked
+                      Color(red: 0.10, green: 0.10, blue: 0.15)
                     ]),
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
@@ -121,25 +121,25 @@ struct HomeView: View {
                           Color.clear,
                           Color.black.opacity(0.2)
                         ] : [
-                          Color.black.opacity(0.2),
+                          Color.white.opacity(0.4),
                           Color.clear,
-                          Color.white.opacity(0.3)
+                          Color.black.opacity(0.3)
                         ]),
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                       ),
-                      lineWidth: 1
+                      lineWidth: isBlocking ? 1 : 2
                     )
                 )
-                .shadow(color: isBlocking ? .black.opacity(0.3) : .black.opacity(0.2), radius: 8, x: 0, y: 4)
-                .shadow(color: isBlocking ? .white.opacity(0.1) : .white.opacity(0.3), radius: 2, x: 0, y: -1)
+                .shadow(color: isBlocking ? .black.opacity(0.3) : .black.opacity(0.4), radius: isBlocking ? 8 : 12, x: 0, y: isBlocking ? 4 : 6)
+                .shadow(color: isBlocking ? .white.opacity(0.1) : .white.opacity(0.2), radius: isBlocking ? 2 : 4, x: 0, y: isBlocking ? -1 : -2)
                 .animation(.easeInOut(duration: 0.3), value: isBlocking)
               
               // Button text
               Text("BRICK")
                 .font(.system(size: 18, weight: .medium, design: .monospaced))
-                .foregroundColor(isBlocking ? .white : .black)
-                .shadow(color: isBlocking ? .black.opacity(0.5) : .white.opacity(0.5), radius: 1, x: 0, y: 1)
+                .foregroundColor(.white) // Always white since button is always dark
+                .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
                 .animation(.easeInOut(duration: 0.3), value: isBlocking)
             }
           }
