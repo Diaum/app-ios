@@ -13,6 +13,9 @@ struct NewModeModal: View {
     // Callback to notify when a new profile is created and should be activated
     var onProfileCreated: ((BlockedProfiles) -> Void)?
     
+    // Profile to edit (nil for new profile)
+    var profileToEdit: BlockedProfiles?
+    
     @State private var name: String = ""
     @State private var enableLiveActivity: Bool = false
     @State private var enableReminder: Bool = false
@@ -21,7 +24,7 @@ struct NewModeModal: View {
     @State private var reminderTimeInMinutes: Int = 15
     @State private var customReminderMessage: String
     @State private var enableAllowMode: Bool = false
-    @State private var enableAllowModeDomain: Bool = false
+    @State private var enableAllowModeDomains: Bool = false
     @State private var disableBackgroundStops: Bool = false
     @State private var domains: [String] = []
     
@@ -56,44 +59,45 @@ struct NewModeModal: View {
     @State private var selectedStrategy: BlockingStrategy? = nil
     
     
-    init(onProfileCreated: ((BlockedProfiles) -> Void)? = nil) {
+    init(profileToEdit: BlockedProfiles? = nil, onProfileCreated: ((BlockedProfiles) -> Void)? = nil) {
+        self.profileToEdit = profileToEdit
         self.onProfileCreated = onProfileCreated
-        _name = State(initialValue: "")
+        _name = State(initialValue: profileToEdit?.name ?? "")
         _selectedActivity = State(
-            initialValue: FamilyActivitySelection()
+            initialValue: profileToEdit?.selectedActivity ?? FamilyActivitySelection()
         )
         _enableLiveActivity = State(
-            initialValue: true
+            initialValue: profileToEdit?.enableLiveActivity ?? true
         )
         _enableBreaks = State(
-            initialValue: false
+            initialValue: profileToEdit?.enableBreaks ?? false
         )
         _enableStrictMode = State(
-            initialValue: false
+            initialValue: profileToEdit?.enableStrictMode ?? false
         )
         _enableAllowMode = State(
-            initialValue: false
+            initialValue: profileToEdit?.enableAllowMode ?? false
         )
-        _enableAllowModeDomain = State(
-            initialValue: false
+        _enableAllowModeDomains = State(
+            initialValue: profileToEdit?.enableAllowModeDomains ?? false
         )
         _enableReminder = State(
-            initialValue: true
+            initialValue: profileToEdit?.reminderTimeInSeconds != nil
         )
         _disableBackgroundStops = State(
-            initialValue: false
+            initialValue: profileToEdit?.disableBackgroundStops ?? false
         )
         _reminderTimeInMinutes = State(
-            initialValue: 5
+            initialValue: profileToEdit?.reminderTimeInSeconds != nil ? Int(profileToEdit!.reminderTimeInSeconds! / 60) : 5
         )
         _customReminderMessage = State(
-            initialValue: ""
+            initialValue: profileToEdit?.customReminderMessage ?? ""
         )
         _domains = State(
-            initialValue: []
+            initialValue: profileToEdit?.domains ?? []
         )
         _schedule = State(
-            initialValue: BlockedProfileSchedule(
+            initialValue: profileToEdit?.schedule ?? BlockedProfileSchedule(
                 days: [],
                 startHour: 9,
                 startMinute: 0,
@@ -111,7 +115,7 @@ struct NewModeModal: View {
             VStack(spacing: 0) {
                 // Header with NEW MODE title
                 HStack {
-                    Text("NEW MODE")
+                    Text(profileToEdit != nil ? "EDIT MODE" : "NEW MODE")
                         .font(.system(size: 32, weight: .bold, design: .monospaced))
                         .foregroundColor(.primary)
                     
@@ -170,7 +174,7 @@ struct NewModeModal: View {
                     }
                     
                     Section {
-                        Text(enableAllowModeDomain ? "ALLOWED" : "BLOCKED" + " DOMAINS")
+                        Text(enableAllowModeDomains ? "ALLOWED" : "BLOCKED" + " DOMAINS")
                             .font(.system(size: 12, weight: .regular, design: .monospaced))
                             .foregroundColor(.primary)
                             .padding(.horizontal, 20)
@@ -178,7 +182,7 @@ struct NewModeModal: View {
                         BlockedProfileDomainSelector(
                             domains: domains,
                             buttonAction: { showingDomainPicker = true },
-                            allowMode: enableAllowModeDomain,
+                            allowMode: enableAllowModeDomains,
                             disabled: false
                         )
                         
@@ -186,7 +190,7 @@ struct NewModeModal: View {
                             title: "Domain Allow Mode",
                             description:
                                 "Pick domains to allow and block everything else. This will erase any other selection you've made.",
-                            isOn: $enableAllowModeDomain,
+                            isOn: $enableAllowModeDomains,
                             isDisabled: false
                         )
                     }
@@ -314,7 +318,7 @@ struct NewModeModal: View {
                     VStack(spacing: 12) {
                         // Black SAVE MODE Button
                         Button(action: { saveProfile() }) {
-                            Text("SAVE MODE")
+                            Text(profileToEdit != nil ? "UPDATE MODE" : "SAVE MODE")
                                 .font(.system(size: 16, weight: .semibold, design: .monospaced))
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
@@ -371,7 +375,7 @@ struct NewModeModal: View {
                     DomainPicker(
                         domains: $domains,
                         isPresented: $showingDomainPicker,
-                        allowMode: enableAllowModeDomain
+                        allowMode: enableAllowModeDomains
                     )
                 }
                 .sheet(isPresented: $showingSchedulePicker) {
@@ -394,15 +398,49 @@ struct NewModeModal: View {
          showError = true
      }
      
-     func saveProfile() {
-            do {
-                // Update schedule date
-                schedule.updatedAt = Date()
-                
-                // Calculate reminder time in seconds or nil if disabled
-                let reminderTimeSeconds: UInt32? =
+    func saveProfile() {
+        // Check for duplicate names (only for new profiles or when name changed)
+        if profileToEdit == nil || profileToEdit?.name.lowercased() != name.lowercased() {
+            let existingProfiles = try? modelContext.fetch(FetchDescriptor<BlockedProfiles>())
+            if let profiles = existingProfiles {
+                let duplicateName = profiles.contains { $0.name.lowercased() == name.lowercased() }
+                if duplicateName {
+                    showError(message: "A mode with this name already exists. Please choose a different name.")
+                    return
+                }
+            }
+        }
+        
+        do {
+            // Update schedule date
+            schedule.updatedAt = Date()
+            
+            // Calculate reminder time in seconds or nil if disabled
+            let reminderTimeSeconds: UInt32? =
                 enableReminder ? UInt32(reminderTimeInMinutes * 60) : nil
+            
+            if let existingProfile = profileToEdit {
+                // Update existing profile
+                existingProfile.name = name
+                existingProfile.selectedActivity = selectedActivity
+                existingProfile.enableLiveActivity = enableLiveActivity
+                existingProfile.reminderTimeInSeconds = reminderTimeSeconds
+                existingProfile.customReminderMessage = customReminderMessage.isEmpty ? nil : customReminderMessage
+                existingProfile.enableBreaks = enableBreaks
+                existingProfile.enableStrictMode = enableStrictMode
+                existingProfile.enableAllowMode = enableAllowMode
+                existingProfile.enableAllowModeDomains = enableAllowModeDomains
+                existingProfile.domains = domains
+                existingProfile.schedule = schedule
+                existingProfile.disableBackgroundStops = disableBackgroundStops
                 
+                // Schedule restrictions
+                DeviceActivityCenterUtil.scheduleRestrictions(for: existingProfile)
+                
+                // Call the callback to notify that the profile was updated
+                onProfileCreated?(existingProfile)
+            } else {
+                // Create new profile
                 let newProfile = try BlockedProfiles.createProfile(
                     in: modelContext,
                     name: name,
@@ -414,7 +452,7 @@ struct NewModeModal: View {
                     enableBreaks: enableBreaks,
                     enableStrictMode: enableStrictMode,
                     enableAllowMode: enableAllowMode,
-                    enableAllowModeDomains: enableAllowModeDomain,
+                    enableAllowModeDomains: enableAllowModeDomains,
                     domains: domains,
                     physicalUnblockNFCTagId: nil,
                     physicalUnblockQRCodeId: nil,
@@ -427,13 +465,14 @@ struct NewModeModal: View {
                 
                 // Call the callback to notify that a new profile was created
                 onProfileCreated?(newProfile)
-                
-                dismiss()
-            } catch {
-                errorMessage = error.localizedDescription
-                showError = true
             }
-         }
+            
+            dismiss()
+        } catch {
+            errorMessage = error.localizedDescription
+            showError = true
+        }
+    }
      }
  
     // Preview provider for SwiftUI previews

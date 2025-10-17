@@ -13,6 +13,7 @@ struct ProfileModalView: View {
   @State private var showingDeleteAlert = false
   @State private var isDeleteModeActive = false
   @State private var showingNewModeModal = false
+  @State private var profileToEdit: BlockedProfiles? = nil
   
   // Dynamic height calculation
   private var modalHeight: CGFloat {
@@ -112,10 +113,9 @@ struct ProfileModalView: View {
     .presentationDragIndicator(.visible)
     .presentationBackground(.regularMaterial)
     .sheet(isPresented: $showingNewModeModal) {
-      NewModeModal(onProfileCreated: { newProfile in
-        // Chamar o callback original para notificar que um novo perfil foi criado
-        onCreateProfile()
-        // Fechar o ProfileModalView também
+      NewModeModal(profileToEdit: profileToEdit, onProfileCreated: { newProfile in
+        // Apenas fechar o ProfileModalView, não chamar onCreateProfile()
+        profileToEdit = nil
         dismiss()
       })
     }
@@ -155,7 +155,10 @@ struct ProfileModalView: View {
             selectedProfile = profile
             dismiss()
           },
-          onEdit: { onEditProfile(profile) },
+          onEdit: { 
+            profileToEdit = profile
+            showingNewModeModal = true
+          },
           onDelete: {
             profileToDelete = profile
             showingDeleteAlert = true
@@ -192,15 +195,6 @@ struct ModeRowView: View {
       Text(profile.name.uppercased())
         .font(.system(size: 16, weight: .regular, design: .monospaced))
         .foregroundColor(.black)
-      
-      Spacer()
-      
-      if isSelected {
-        Image(systemName: "checkmark")
-          .font(.system(size: 14, weight: .medium, design: .monospaced))
-          .foregroundColor(.black)
-          .accessibilityLabel("Selected")
-      }
       
       Spacer()
       
