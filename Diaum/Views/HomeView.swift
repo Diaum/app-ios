@@ -69,13 +69,11 @@ struct HomeView: View {
         
         // Main Content - Centered vertically and horizontally
         VStack(spacing: 16) {
-          // Label Above Button - "TAP TO UNBRICK"
-          if isBlocking {
-            Text("TAP TO UNBRICK")
-              .font(.system(size: 16, weight: .regular, design: .monospaced))
-              .foregroundColor(.white)
-              .multilineTextAlignment(.center)
-          }
+          // Label Above Button - Always visible
+          Text(isBlocking ? "TAP TO UNBRICK" : "TAP TO BRICK")
+            .font(.system(size: 16, weight: .regular, design: .monospaced))
+            .foregroundColor(.white)
+            .multilineTextAlignment(.center)
           
           // Main BRICK Button
           Button(action: {
@@ -101,28 +99,25 @@ struct HomeView: View {
                 .frame(width: 120, height: 120)
                 .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
               
-              // Button text with progress overlay
-              ZStack {
-                Text("BRICK")
-                  .font(.system(size: 18, weight: .regular, design: .monospaced))
-                  .foregroundColor(.white)
-                
-                // Emergency progress bar (red, growing from bottom to top) - inside text area
-                if isEmergencyStopActive {
-                  VStack {
-                    Spacer()
-                    RoundedRectangle(cornerRadius: 6)
-                      .fill(Color.red.opacity(0.4))
-                      .frame(width: 80, height: 20 * emergencyProgress)
-                      .animation(.linear(duration: 0.1), value: emergencyProgress)
-                  }
+              // Emergency progress bar (red, growing from bottom to top) - inside button
+              if isEmergencyStopActive {
+                VStack {
+                  Spacer()
+                  RoundedRectangle(cornerRadius: 12)
+                    .fill(Color.red.opacity(0.3))
+                    .frame(width: 120, height: 120 * emergencyProgress)
+                    .animation(.linear(duration: 0.1), value: emergencyProgress)
                 }
               }
+              
+              // Button text
+              Text("BRICK")
+                .font(.system(size: 18, weight: .regular, design: .monospaced))
+                .foregroundColor(.white)
+                .zIndex(1) // Ensure text stays on top
             }
           }
           .buttonStyle(PlainButtonStyle())
-          .scaleEffect(isBlocking ? 1.0 : 1.0)
-          .animation(.easeInOut(duration: 0.2), value: isBlocking)
           .onLongPressGesture(minimumDuration: 2.0, maximumDistance: 50) {
             // Emergency stop - force stop any active session
             emergencyStop()
@@ -150,7 +145,7 @@ struct HomeView: View {
           }
           .buttonStyle(PlainButtonStyle())
           
-          // Timer Counter - "YOU'VE BEEN BRICKED FOR"
+          // Timer Counter - Only when blocking
           if isBlocking {
             VStack(spacing: 4) {
               Text("YOU'VE BEEN BRICKED FOR")
