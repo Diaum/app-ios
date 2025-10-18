@@ -61,7 +61,7 @@ struct HomeView: View {
   // Computed properties for profile button colors
   private var profileButtonTextColor: Color {
     if isBlocking {
-      return .gray.opacity(0.6)
+      return .white.opacity(0.8) // Mudado para branco mais claro quando bloqueando
     } else {
       return .black.opacity(0.8)
     }
@@ -69,7 +69,7 @@ struct HomeView: View {
   
   private var profileButtonStrokeColor: Color {
     if isBlocking {
-      return .gray.opacity(0.3)
+      return .white.opacity(0.4) // Mudado para branco quando bloqueando
     } else {
       return .black.opacity(0.4)
     }
@@ -77,7 +77,7 @@ struct HomeView: View {
   
   private var profileButtonFillColor: Color {
     if isBlocking {
-      return .gray.opacity(0.1)
+      return .white.opacity(0.1) // Mudado para branco quando bloqueando
     } else {
       return .white.opacity(0.2)
     }

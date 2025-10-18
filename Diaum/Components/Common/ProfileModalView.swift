@@ -16,6 +16,16 @@ struct ProfileModalView: View {
   @State private var profileToEdit: BlockedProfiles? = nil
   
   // Dynamic height calculation
+  // MARK: - Computed Properties
+  private var sortedProfiles: [BlockedProfiles] {
+    if let selectedProfile = selectedProfile {
+      // Colocar o perfil selecionado no topo
+      return [selectedProfile] + profiles.filter { $0.id != selectedProfile.id }
+    } else {
+      return profiles
+    }
+  }
+  
   private var modalHeight: CGFloat {
     let baseHeight: CGFloat = 200 // Header + bottom button + padding
     let profileRowHeight: CGFloat = 60 // Each profile row height
@@ -100,10 +110,14 @@ struct ProfileModalView: View {
       .background(Color.white)
     }
     .alert("Delete Profile", isPresented: $showingDeleteAlert) {
-      Button("Cancel", role: .cancel) { }
+      Button("Cancel", role: .cancel) { 
+        profileToDelete = nil
+      }
       Button("Delete", role: .destructive) {
         if let profile = profileToDelete {
           onDeleteProfile(profile)
+          profileToDelete = nil
+          // Não fechar o modal após deletar
         }
       }
     } message: {
@@ -114,7 +128,8 @@ struct ProfileModalView: View {
     .presentationBackground(.regularMaterial)
     .sheet(isPresented: $showingNewModeModal) {
       NewModeModal(profileToEdit: profileToEdit, onProfileCreated: { newProfile in
-        // Apenas fechar o ProfileModalView, não chamar onCreateProfile()
+        // Selecionar automaticamente o novo modo criado
+        selectedProfile = newProfile
         profileToEdit = nil
         dismiss()
       })
@@ -146,7 +161,7 @@ struct ProfileModalView: View {
   // MARK: - Modes List View
   private var modesListView: some View {
     VStack(spacing: 0) {
-      ForEach(profiles) { profile in
+      ForEach(sortedProfiles) { profile in
         ModeRowView(
           profile: profile,
           isSelected: selectedProfile?.id == profile.id,

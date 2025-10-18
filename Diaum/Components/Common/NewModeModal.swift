@@ -115,13 +115,6 @@ struct NewModeModal: View {
                                 disabled: false
                             )
                             
-                            CustomToggle(
-                                title: "Domain Allow Mode",
-                                description: "Pick domains to allow and block everything else. This will erase any other selection you've made.",
-                                isOn: $enableAllowModeDomains,
-                                isDisabled: false
-                            )
-                            
                             // Auto Blocklist Info
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("AUTO BLOCKLIST")
@@ -190,10 +183,10 @@ struct NewModeModal: View {
                             Button(action: saveProfile) {
                                 Text(profileToEdit != nil ? "UPDATE MODE" : "SAVE MODE")
                                     .font(.system(size: 14, weight: .regular, design: .monospaced))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(name.isEmpty ? .gray : .white)
                                     .frame(maxWidth: .infinity)
                                     .padding(.vertical, 14)
-                                    .background(Color.black)
+                                    .background(name.isEmpty ? Color.gray.opacity(0.3) : Color.black)
                                     .cornerRadius(8)
                             }
                             .disabled(name.isEmpty)
