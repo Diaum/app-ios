@@ -282,7 +282,12 @@ struct HomeView: View {
       }.interactiveDismissDisabled()
     }
     .sheet(item: $profileToEdit) { profile in
-      BlockedProfileView(profile: profile)
+      BlockedProfileView(profile: profile) { updatedProfile in
+        // Profile was updated, close all modals
+        profileToEdit = nil
+        showProfileModal = false
+        showNewProfileView = false
+      }
     }
     .sheet(item: $profileToShowStats) { profile in
       ProfileInsightsView(profile: profile)
@@ -290,6 +295,10 @@ struct HomeView: View {
     .sheet(isPresented: $showNewProfileView) {
       BlockedProfileView(profile: nil) { newProfile in
         strategyManager.toggleBlocking(context: context, activeProfile: newProfile)
+        // Close all modals after creating new profile
+        showNewProfileView = false
+        showProfileModal = false
+        profileToEdit = nil
       }
     }
     .sheet(isPresented: $strategyManager.showCustomStrategyView) {
@@ -311,14 +320,17 @@ struct HomeView: View {
         onEditProfile: { profile in
           profileToEdit = profile
           showProfileModal = false
+          showNewProfileView = false
         },
         onCreateProfile: {
           showNewProfileView = true
           showProfileModal = false
+          profileToEdit = nil
         },
         onDeleteProfile: { profile in
           deleteProfile(profile)
           showProfileModal = false
+          profileToEdit = nil
         }
       )
     }
