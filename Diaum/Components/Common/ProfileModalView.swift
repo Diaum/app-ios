@@ -174,7 +174,6 @@ struct ProfileModalView: View {
           onEdit: { 
             profileToEdit = profile
             showingNewModeModal = true
-            dismiss() // Fechar o ProfileModalView antes de abrir o NewModeModal
           },
           onDelete: {
             profileToDelete = profile
