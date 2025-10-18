@@ -24,7 +24,7 @@ struct BlockedProfileView: View {
   @State private var reminderTimeInMinutes: Int = 15
   @State private var customReminderMessage: String
   @State private var enableAllowMode: Bool = false
-  @State private var enableAllowModeDomain: Bool = false
+  @State private var enableAllowModeDomains: Bool = false
   @State private var disableBackgroundStops: Bool = false
   @State private var domains: [String] = []
 
@@ -91,7 +91,7 @@ struct BlockedProfileView: View {
     _enableAllowMode = State(
       initialValue: profile?.enableAllowMode ?? false
     )
-    _enableAllowModeDomain = State(
+    _enableAllowModeDomains = State(
       initialValue: profile?.enableAllowModeDomains ?? false
     )
     _enableReminder = State(
@@ -184,11 +184,11 @@ struct BlockedProfileView: View {
           )
         }
 
-        Section(enableAllowModeDomain ? "Allowed" : "Blocked" + " Domains") {
+        Section(enableAllowModeDomains ? "Allowed" : "Blocked" + " Domains") {
           BlockedProfileDomainSelector(
             domains: domains,
             buttonAction: { showingDomainPicker = true },
-            allowMode: enableAllowModeDomain,
+            allowMode: enableAllowModeDomains,
             disabled: isBlocking
           )
 
@@ -196,7 +196,7 @@ struct BlockedProfileView: View {
             title: "Domain Allow Mode",
             description:
               "Pick domains to allow and block everything else. This will erase any other selection you've made.",
-            isOn: $enableAllowModeDomain,
+            isOn: $enableAllowModeDomains,
             isDisabled: isBlocking
           )
         }
@@ -405,7 +405,7 @@ struct BlockedProfileView: View {
         DomainPicker(
           domains: $domains,
           isPresented: $showingDomainPicker,
-          allowMode: enableAllowModeDomain
+          allowMode: enableAllowModeDomains
         )
       }
       .sheet(isPresented: $showingSchedulePicker) {
