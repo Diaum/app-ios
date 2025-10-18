@@ -57,23 +57,50 @@ struct HomeView: View {
   var isBreakActive: Bool {
     return strategyManager.isBreakActive
   }
+  
+  // Computed properties for profile button colors
+  private var profileButtonTextColor: Color {
+    if isBlocking {
+      return .white.opacity(0.8) // Mudado para branco mais claro quando bloqueando
+    } else {
+      return .black.opacity(0.8)
+    }
+  }
+  
+  private var profileButtonStrokeColor: Color {
+    if isBlocking {
+      return .white.opacity(0.4) // Mudado para branco quando bloqueando
+    } else {
+      return .black.opacity(0.4)
+    }
+  }
+  
+  private var profileButtonFillColor: Color {
+    if isBlocking {
+      return .white.opacity(0.1) // Mudado para branco quando bloqueando
+    } else {
+      return .white.opacity(0.2)
+    }
+  }
 
   var body: some View {
     ZStack {
-      // Background - Dark gradient/solid color (#121212)
-      Color(red: 0.07, green: 0.07, blue: 0.07) // #121212
+      // Background - Dynamic theme
+      Color(isBlocking ? Color(red: 0.07, green: 0.07, blue: 0.07) : Color.white)
         .ignoresSafeArea()
+        .animation(.easeInOut(duration: 0.3), value: isBlocking)
       
       VStack(spacing: 0) {
-        Spacer()
+          Spacer()
         
         // Main Content - Centered vertically and horizontally
         VStack(spacing: 16) {
           // Label Above Button - Always visible
           Text(isBlocking ? "TAP TO UNBRICK" : "TAP TO BRICK")
             .font(.system(size: 16, weight: .regular, design: .monospaced))
-            .foregroundColor(.white)
+            .foregroundColor(isBlocking ? .white : .black)
             .multilineTextAlignment(.center)
+            .animation(.easeInOut(duration: 0.3), value: isBlocking)
           
           // Main BRICK Button
           Button(action: {
@@ -98,9 +125,12 @@ struct HomeView: View {
               RoundedRectangle(cornerRadius: 16)
                 .fill(
                   LinearGradient(
-                    gradient: Gradient(colors: [
-                      Color(red: 0.55, green: 0.55, blue: 0.62), // Lighter top
-                      Color(red: 0.42, green: 0.42, blue: 0.48)  // Darker bottom
+                    gradient: Gradient(colors: isBlocking ? [
+                      Color(red: 0.55, green: 0.55, blue: 0.62), // Dark theme
+                      Color(red: 0.42, green: 0.42, blue: 0.48)
+                    ] : [
+                      Color(red: 0.15, green: 0.15, blue: 0.20), // Black when unlocked
+                      Color(red: 0.10, green: 0.10, blue: 0.15)
                     ]),
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
@@ -111,48 +141,58 @@ struct HomeView: View {
                   RoundedRectangle(cornerRadius: 16)
                     .stroke(
                       LinearGradient(
-                        gradient: Gradient(colors: [
+                        gradient: Gradient(colors: isBlocking ? [
                           Color.white.opacity(0.3),
                           Color.clear,
                           Color.black.opacity(0.2)
+                        ] : [
+                          Color.white.opacity(0.4),
+                          Color.clear,
+                          Color.black.opacity(0.3)
                         ]),
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                       ),
-                      lineWidth: 1
+                      lineWidth: isBlocking ? 1 : 2
                     )
                 )
-                .shadow(color: .black.opacity(0.3), radius: 8, x: 0, y: 4)
-                .shadow(color: .white.opacity(0.1), radius: 2, x: 0, y: -1)
+                .shadow(color: isBlocking ? .black.opacity(0.3) : .black.opacity(0.4), radius: isBlocking ? 8 : 12, x: 0, y: isBlocking ? 4 : 6)
+                .shadow(color: isBlocking ? .white.opacity(0.1) : .white.opacity(0.2), radius: isBlocking ? 2 : 4, x: 0, y: isBlocking ? -1 : -2)
+                .animation(.easeInOut(duration: 0.3), value: isBlocking)
               
               // Button text
               Text("BRICK")
                 .font(.system(size: 18, weight: .medium, design: .monospaced))
-                .foregroundColor(.white)
+                .foregroundColor(.white) // Always white since button is always dark
                 .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
+                .animation(.easeInOut(duration: 0.3), value: isBlocking)
             }
           }
           .buttonStyle(PlainButtonStyle())
           
           // Label Below Button - Profile Name (Clickable)
           Button(action: {
-            showProfileModal = true
+            if !isBlocking {
+              showProfileModal = true
+            }
           }) {
             Text(selectedProfile?.name ?? "MODE")
               .font(.system(size: 14, weight: .medium, design: .monospaced))
-              .foregroundColor(.white.opacity(0.8))
+              .foregroundColor(profileButtonTextColor)
               .padding(.horizontal, 20)
               .padding(.vertical, 10)
               .background(
                 RoundedRectangle(cornerRadius: 16)
-                  .stroke(Color.white.opacity(0.4), lineWidth: 2)
+                  .stroke(profileButtonStrokeColor, lineWidth: 2)
                   .background(
                     RoundedRectangle(cornerRadius: 16)
-                      .fill(Color.black.opacity(0.2))
+                      .fill(profileButtonFillColor)
                   )
               )
+              .animation(.easeInOut(duration: 0.3), value: isBlocking)
           }
           .buttonStyle(PlainButtonStyle())
+          .disabled(isBlocking)
           
           // Timer Counter - Always visible with different content
           VStack(spacing: 4) {
@@ -167,13 +207,14 @@ struct HomeView: View {
             } else {
               Text("TOTAL BLOCKED TODAY")
                 .font(.system(size: 12, weight: .regular, design: .monospaced))
-                .foregroundColor(.white.opacity(0.6))
+                .foregroundColor(.black.opacity(0.6))
               
               Text(formatElapsedTime(getDailyBlockedTime()))
                 .font(.system(size: 12, weight: .regular, design: .monospaced))
-                .foregroundColor(.white.opacity(0.6))
+                .foregroundColor(.black.opacity(0.6))
             }
           }
+          .animation(.easeInOut(duration: 0.3), value: isBlocking)
         }
         
         Spacer()
@@ -274,6 +315,10 @@ struct HomeView: View {
         onCreateProfile: {
           showNewProfileView = true
           showProfileModal = false
+        },
+        onDeleteProfile: { profile in
+          deleteProfile(profile)
+          showProfileModal = false
         }
       )
     }
@@ -289,6 +334,10 @@ struct HomeView: View {
   }
 
   private func strategyButtonPress(_ profile: BlockedProfiles) {
+    // Adicionar vibração tátil
+    let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+    impactFeedback.impactOccurred()
+    
     saveLastUsedProfile(profile)
     strategyManager.toggleBlocking(context: context, activeProfile: profile)
     ratingManager.incrementLaunchCount()
@@ -314,6 +363,23 @@ struct HomeView: View {
   
   private func saveLastUsedProfile(_ profile: BlockedProfiles) {
     lastUsedProfileId = profile.id.uuidString
+  }
+  
+  private func deleteProfile(_ profile: BlockedProfiles) {
+    // If this was the selected profile, clear selection
+    if selectedProfile?.id == profile.id {
+      selectedProfile = nil
+    }
+    
+    // Delete from context
+    context.delete(profile)
+    
+    // Save context
+    do {
+      try context.save()
+    } catch {
+      print("Error deleting profile: \(error)")
+    }
   }
 
   private func unloadApp() {

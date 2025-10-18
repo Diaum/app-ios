@@ -10,10 +10,11 @@ struct CustomToggle: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
       Toggle(title, isOn: $isOn)
+        .font(.system(size: 16, weight: .regular, design: .monospaced))
         .disabled(isDisabled)
 
       Text(description)
-        .font(.caption)
+        .font(.system(size: 12, weight: .regular, design: .monospaced))
         .foregroundColor(.secondary)
         .padding(.vertical, 4)
         .fixedSize(horizontal: false, vertical: true)
@@ -22,7 +23,7 @@ struct CustomToggle: View {
 
       if isDisabled && errorMessage != nil {
         Text(errorMessage!)
-          .font(.caption)
+          .font(.system(size: 12, weight: .regular, design: .monospaced))
           .foregroundColor(.red)
       }
     }

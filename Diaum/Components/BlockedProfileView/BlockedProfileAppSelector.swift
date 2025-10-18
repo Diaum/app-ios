@@ -31,40 +31,81 @@ struct BlockedProfileAppSelector: View {
   }
 
   var body: some View {
-
-    Button(action: buttonAction) {
-      HStack {
-        Text(buttonText)
-        Spacer()
-        Image(systemName: "chevron.right")
-          .foregroundStyle(.gray)
+    VStack(spacing: 12) {
+      // Main button with improved styling
+      Button(action: buttonAction) {
+        HStack(spacing: 12) {
+          // Icon
+          Image(systemName: catAndAppCount > 0 ? "checkmark.circle.fill" : "plus.circle")
+            .font(.system(size: 20, weight: .medium))
+            .foregroundColor(catAndAppCount > 0 ? .green : .blue)
+          
+          VStack(alignment: .leading, spacing: 2) {
+            Text(buttonText)
+              .font(.system(size: 16, weight: .medium, design: .monospaced))
+              .foregroundColor(.primary)
+            
+            if catAndAppCount > 0 {
+              Text("\(countDisplayText) selected")
+                .font(.system(size: 12, weight: .regular, design: .monospaced))
+                .foregroundColor(.secondary)
+            }
+          }
+          
+          Spacer()
+          
+          // Arrow icon
+          Image(systemName: "chevron.right")
+            .font(.system(size: 14, weight: .medium))
+            .foregroundColor(.secondary)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 14)
+        .background(
+          RoundedRectangle(cornerRadius: 12)
+            .fill(Color(.systemGray6))
+            .overlay(
+              RoundedRectangle(cornerRadius: 12)
+                .stroke(catAndAppCount > 0 ? Color.green.opacity(0.3) : Color.blue.opacity(0.3), lineWidth: 1)
+            )
+        )
       }
-    }
-    .disabled(disabled)
-
-    if let disabledText = disabledText, disabled {
-      Text(disabledText)
-        .foregroundStyle(.red)
-        .padding(.top, 4)
-        .font(.caption)
-    } else if catAndAppCount == 0 {
-      Text("No apps or websites selected")
-        .foregroundStyle(.gray)
-    } else {
-      VStack(alignment: .leading, spacing: 4) {
-        Text("\(countDisplayText) selected")
-          .font(.footnote)
-          .foregroundStyle(.gray)
-
-        if shouldShowWarning {
-          Text("⚠️ Categories expand to individual apps in Allow mode")
-            .font(.caption)
+      .disabled(disabled)
+      .opacity(disabled ? 0.6 : 1.0)
+      
+      // Status messages
+      if let disabledText = disabledText, disabled {
+        HStack {
+          Image(systemName: "exclamationmark.triangle.fill")
+            .foregroundColor(.red)
+            .font(.system(size: 12))
+          Text(disabledText)
+            .font(.system(size: 12, weight: .regular, design: .monospaced))
+            .foregroundColor(.red)
+        }
+        .padding(.horizontal, 4)
+      } else if catAndAppCount == 0 {
+        HStack {
+          Image(systemName: "info.circle")
+            .foregroundColor(.orange)
+            .font(.system(size: 12))
+          Text("No apps or websites selected")
+            .font(.system(size: 12, weight: .regular, design: .monospaced))
             .foregroundColor(.orange)
         }
+        .padding(.horizontal, 4)
+      } else if shouldShowWarning {
+        HStack {
+          Image(systemName: "exclamationmark.triangle.fill")
+            .foregroundColor(.orange)
+            .font(.system(size: 12))
+          Text("Categories expand to individual apps in Allow mode")
+            .font(.system(size: 12, weight: .regular, design: .monospaced))
+            .foregroundColor(.orange)
+        }
+        .padding(.horizontal, 4)
       }
-      .padding(.top, 4)
     }
-
   }
 }
 

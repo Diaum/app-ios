@@ -41,8 +41,7 @@ struct StrategyInfoView: View {
       VStack(alignment: .leading, spacing: 2) {
         Text(blockingStrategyName)
           .foregroundColor(.primary)
-          .font(.subheadline)
-          .fontWeight(.medium)
+          .font(.system(size: 14, weight: .medium, design: .monospaced))
       }
     }
   }
