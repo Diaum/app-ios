@@ -20,7 +20,6 @@ struct NewModeModal: View {
     @State private var enableStrictMode = false
     @State private var reminderTimeInMinutes = 15
     @State private var customReminderMessage = ""
-    @State private var enableAllowMode = false
     @State private var enableAllowModeDomains = false
     @State private var disableBackgroundStops = false
     @State private var domains: [String] = []
@@ -42,7 +41,6 @@ struct NewModeModal: View {
         _enableLiveActivity = State(initialValue: profileToEdit?.enableLiveActivity ?? true)
         _enableBreaks = State(initialValue: profileToEdit?.enableBreaks ?? false)
         _enableStrictMode = State(initialValue: profileToEdit?.enableStrictMode ?? false)
-        _enableAllowMode = State(initialValue: profileToEdit?.enableAllowMode ?? false)
         _enableAllowModeDomains = State(initialValue: profileToEdit?.enableAllowModeDomains ?? false)
         _enableReminder = State(initialValue: profileToEdit?.reminderTimeInSeconds != nil)
         _disableBackgroundStops = State(initialValue: profileToEdit?.disableBackgroundStops ?? false)
@@ -90,24 +88,18 @@ struct NewModeModal: View {
                         }
                         
                         // BLOCKED APPS
-                        section(title: (enableAllowMode ? "ALLOWED" : "BLOCKED") + " APPS & WEBSITES", stepNumber: 2) {
+                        section(title: "BLOCKED APPS", stepNumber: 2) {
                             BlockedProfileAppSelector(
                                 selection: selectedActivity,
                                 buttonAction: { showingActivityPicker = true },
-                                allowMode: enableAllowMode,
+                                allowMode: false,
                                 disabled: false
                             )
                             
-                            CustomToggle(
-                                title: "Apps Allow Mode",
-                                description: "Pick apps or websites to allow and block everything else. This will erase any other selection you've made.",
-                                isOn: $enableAllowMode,
-                                isDisabled: false
-                            )
                         }
                         
                         // DOMAINS
-                        section(title: (enableAllowModeDomains ? "ALLOWED" : "BLOCKED") + " DOMAINS", stepNumber: 3) {
+                        section(title: (enableAllowModeDomains ? "ALLOWED" : "BLOCKED") + " WEBSITES", stepNumber: 3) {
                             BlockedProfileDomainSelector(
                                 domains: domains,
                                 buttonAction: { showingDomainPicker = true },
@@ -214,14 +206,11 @@ struct NewModeModal: View {
             }
             .background(Color.white)
             .preferredColorScheme(.light)
-            .onChange(of: enableAllowMode) { _, newValue in
-                selectedActivity = FamilyActivitySelection(includeEntireCategory: newValue)
-            }
             .sheet(isPresented: $showingActivityPicker) {
                 AppPicker(
                     selection: $selectedActivity,
                     isPresented: $showingActivityPicker,
-                    allowMode: enableAllowMode
+                    allowMode: false
                 )
             }
             .sheet(isPresented: $showingDomainPicker) {
@@ -311,7 +300,6 @@ struct NewModeModal: View {
                 existingProfile.customReminderMessage = customReminderMessage.isEmpty ? nil : customReminderMessage
                 existingProfile.enableBreaks = enableBreaks
                 existingProfile.enableStrictMode = enableStrictMode
-                existingProfile.enableAllowMode = enableAllowMode
                 existingProfile.enableAllowModeDomains = enableAllowModeDomains
                 existingProfile.domains = domains
                 existingProfile.schedule = schedule
@@ -334,7 +322,6 @@ struct NewModeModal: View {
                     customReminderMessage: customReminderMessage,
                     enableBreaks: enableBreaks,
                     enableStrictMode: enableStrictMode,
-                    enableAllowMode: enableAllowMode,
                     enableAllowModeDomains: enableAllowModeDomains,
                     domains: domains,
                     physicalUnblockNFCTagId: nil as String?,
