@@ -46,114 +46,81 @@ struct ProfileWidgetEntryView: View {
 
   var body: some View {
     ZStack {
-      // Main content
-      VStack(spacing: 8) {
-        // Top section: Profile name (left) and hourglass (right)
-        HStack {
-          Text(entry.profileName ?? "No Profile")
-            .font(.system(size: 14))
-            .fontWeight(.bold)
-            .foregroundColor(shouldUseWhiteText ? .white : .primary)
-            .lineLimit(1)
-
-          Spacer()
-
+      // Main content with dark background and rounded corners
+      VStack(spacing: 0) {
+        // Top section: Profile name with hourglass icon
+        HStack(spacing: 8) {
           Image(systemName: "hourglass")
-            .font(.body)
-            .foregroundColor(shouldUseWhiteText ? .white : .purple)
+            .font(.system(size: 18, weight: .medium, design: .monospaced))
+            .foregroundColor(.white)
+          
+          Text(entry.profileName ?? "No Profile")
+            .font(.system(size: 20, weight: .bold, design: .monospaced))
+            .foregroundColor(.white)
+            .lineLimit(1)
         }
-        .padding(.top, 8)
-
-        // Middle section: Blocked count + enabled options count
-        HStack {
-          VStack(alignment: .leading, spacing: 2) {
-            if let profile = entry.profileSnapshot {
-              let blockedCount = getBlockedCount(from: profile)
-              let enabledOptionsCount = getEnabledOptionsCount(from: profile)
-
-              Text("\(blockedCount) Blocked")
-                .font(.system(size: 10))
-                .fontWeight(.medium)
-                .foregroundColor(shouldUseWhiteText ? .white : .secondary)
-
-              Text("with \(enabledOptionsCount) Options")
-                .font(.system(size: 8))
-                .fontWeight(.regular)
-                .foregroundColor(shouldUseWhiteText ? .white : .green)
-            } else {
-              Text("No profile selected")
-                .font(.system(size: 8))
-                .foregroundColor(shouldUseWhiteText ? .white : .secondary)
-            }
-          }
-
-          Spacer()
-        }
-
-        // Bottom section: Status message or timer (takes up most space)
-        VStack {
+        .padding(.top, 16)
+        
+        Spacer()
+        
+        // Bottom section: Status message or timer
+        VStack(spacing: 6) {
           if entry.isBreakActive {
             HStack(spacing: 4) {
               Image(systemName: "cup.and.saucer.fill")
-                .font(.body)
-                .foregroundColor(.white)
+                .font(.system(size: 16, weight: .medium, design: .monospaced))
+                .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
               Text("On a Break")
-                .font(.body)
-                .fontWeight(.bold)
-                .foregroundColor(.white)
+                .font(.system(size: 28, weight: .semibold, design: .monospaced))
+                .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
             }
           } else if entry.isSessionActive {
             if let startTime = entry.sessionStartTime {
-              HStack(spacing: 4) {
-                Image(systemName: "clock.fill")
-                  .font(.body)
-                  .foregroundColor(.white)
-                Text(
-                  Date(
-                    timeIntervalSinceNow: startTime.timeIntervalSince1970
-                      - Date().timeIntervalSince1970
-                  ),
-                  style: .timer
-                )
-                .font(.system(size: 22))
-                .fontWeight(.bold)
-                .foregroundColor(.white)
-              }
+              Text(
+                Date(
+                  timeIntervalSinceNow: startTime.timeIntervalSince1970
+                    - Date().timeIntervalSince1970
+                ),
+                style: .timer
+              )
+              .font(.system(size: 28, weight: .semibold, design: .monospaced))
+              .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
             }
           } else {
             Link(destination: linkToOpen) {
               Text(quickLaunchEnabled ? "Tap to launch" : "Tap to open")
-                .font(.body)
-                .fontWeight(.medium)
-                .foregroundColor(shouldUseWhiteText ? .white : .secondary)
+                .font(.system(size: 28, weight: .semibold, design: .monospaced))
+                .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
             }
           }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(.bottom, 8)
+        .padding(.bottom, 16)
       }
+      .frame(width: 320, height: 100)
+      .background(Color(red: 0.047, green: 0.047, blue: 0.047)) // #0C0C0C
+      .cornerRadius(24)
+      .shadow(color: .black.opacity(0.5), radius: 12, x: 0, y: 0)
       .blur(radius: isUnavailable ? 3 : 0)
 
       // Unavailable overlay
       if isUnavailable {
         VStack(spacing: 4) {
           Image(systemName: "exclamationmark.triangle.fill")
-            .font(.title2)
+            .font(.system(size: 18, weight: .medium, design: .monospaced))
             .foregroundColor(.orange)
 
           Text("Unavailable")
-            .font(.system(size: 16))
-            .fontWeight(.bold)
-            .foregroundColor(.primary)
+            .font(.system(size: 20, weight: .bold, design: .monospaced))
+            .foregroundColor(.white)
 
           Text("Different profile active")
-            .font(.system(size: 10))
-            .foregroundColor(.secondary)
+            .font(.system(size: 16, weight: .medium, design: .monospaced))
+            .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
             .multilineTextAlignment(.center)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(UIColor.systemBackground).opacity(0.9))
-        .cornerRadius(8)
+        .frame(width: 320, height: 100)
+        .background(Color(red: 0.047, green: 0.047, blue: 0.047).opacity(0.9))
+        .cornerRadius(24)
       }
     }
   }

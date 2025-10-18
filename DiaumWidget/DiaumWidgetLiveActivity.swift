@@ -20,41 +20,32 @@ struct DiaumWidgetAttributes: ActivityAttributes {
 struct DiaumWidgetLiveActivity: Widget {
   var body: some WidgetConfiguration {
     ActivityConfiguration(for: DiaumWidgetAttributes.self) { context in
-      // Lock screen/banner UI goes here
-      HStack(alignment: .center, spacing: 16) {
-        // Left side - App info
-        VStack(alignment: .leading, spacing: 8) {
-          HStack(spacing: 4) {
-            Text("Diaum")
-              .font(.headline)
-              .fontWeight(.bold)
-              .foregroundColor(.primary)
-            Image(systemName: "hourglass")
-              .foregroundColor(.purple)
-          }
-
-          Text(context.attributes.name)
-            .font(.subheadline)
-            .foregroundColor(.primary)
-
-          Text(context.attributes.message)
-            .font(.caption)
-            .foregroundColor(.secondary)
+      // Lock screen/banner UI with dark design
+      VStack(spacing: 0) {
+        // Top section: App name with hourglass icon
+        HStack(spacing: 8) {
+          Image(systemName: "hourglass")
+            .font(.system(size: 18, weight: .medium, design: .monospaced))
+            .foregroundColor(.white)
+          
+          Text("Diaum")
+            .font(.system(size: 20, weight: .bold, design: .monospaced))
+            .foregroundColor(.white)
         }
-
+        .padding(.top, 16)
+        
         Spacer()
-
-        // Right side - Timer or break indicator
-        VStack(alignment: .trailing, spacing: 4) {
+        
+        // Bottom section: Timer or break indicator
+        VStack(spacing: 6) {
           if context.state.isBreakActive {
-            HStack(spacing: 6) {
-              Image(systemName: "cup.and.heat.waves.fill")
-                .font(.title2)
-                .foregroundColor(.orange)
+            HStack(spacing: 4) {
+              Image(systemName: "cup.and.saucer.fill")
+                .font(.system(size: 16, weight: .medium, design: .monospaced))
+                .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
               Text("On a Break")
-                .font(.subheadline)
-                .fontWeight(.semibold)
-                .foregroundColor(.orange)
+                .font(.system(size: 28, weight: .semibold, design: .monospaced))
+                .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
             }
           } else {
             Text(
@@ -64,15 +55,16 @@ struct DiaumWidgetLiveActivity: Widget {
               ),
               style: .timer
             )
-            .font(.title)
-            .fontWeight(.semibold)
-            .foregroundColor(.secondary)
-            .multilineTextAlignment(.trailing)
+            .font(.system(size: 28, weight: .semibold, design: .monospaced))
+            .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
           }
         }
+        .padding(.bottom, 16)
       }
-      .padding(.horizontal, 16)
-      .padding(.vertical, 12)
+      .frame(width: 320, height: 100)
+      .background(Color(red: 0.047, green: 0.047, blue: 0.047)) // #0C0C0C
+      .cornerRadius(24)
+      .shadow(color: .black.opacity(0.5), radius: 12, x: 0, y: 0)
 
     } dynamicIsland: { context in
       DynamicIsland {
