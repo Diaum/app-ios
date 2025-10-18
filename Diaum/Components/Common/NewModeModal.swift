@@ -121,6 +121,18 @@ struct NewModeModal: View {
                                 isOn: $enableAllowModeDomains,
                                 isDisabled: false
                             )
+                            
+                            // Auto Blocklist Info
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("AUTO BLOCKLIST")
+                                    .font(.system(size: 12, weight: .regular, design: .monospaced))
+                                    .foregroundColor(.black)
+                                
+                                Text("Adult content domains are automatically blocked by default")
+                                    .font(.system(size: 12, weight: .regular, design: .monospaced))
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(.vertical, 8)
                         }
                         
                         // SCHEDULE
@@ -276,81 +288,81 @@ struct NewModeModal: View {
          showError = true
      }
      
-     func saveProfile() {
-         // Check for duplicate names (only for new profiles or when name changed)
-         if profileToEdit == nil || profileToEdit?.name.lowercased() != name.lowercased() {
-             let existingProfiles = try? modelContext.fetch(FetchDescriptor<BlockedProfiles>())
-             if let profiles = existingProfiles {
-                 let duplicateName = profiles.contains { $0.name.lowercased() == name.lowercased() }
-                 if duplicateName {
-                     showError(message: "A mode with this name already exists. Please choose a different name.")
-                     return
-                 }
-             }
-         }
-         
-         do {
-             // Update schedule date
-             schedule.updatedAt = Date()
-             
-             // Calculate reminder time in seconds or nil if disabled
-             let reminderTimeSeconds: UInt32? =
-                 enableReminder ? UInt32(reminderTimeInMinutes * 60) : nil
-             
-             if let existingProfile = profileToEdit {
-                 // Update existing profile
-                 existingProfile.name = name
-                 existingProfile.selectedActivity = selectedActivity
-                 existingProfile.enableLiveActivity = enableLiveActivity
-                 existingProfile.reminderTimeInSeconds = reminderTimeSeconds
-                 existingProfile.customReminderMessage = customReminderMessage.isEmpty ? nil : customReminderMessage
-                 existingProfile.enableBreaks = enableBreaks
-                 existingProfile.enableStrictMode = enableStrictMode
-                 existingProfile.enableAllowMode = enableAllowMode
-                 existingProfile.enableAllowModeDomains = enableAllowModeDomains
-                 existingProfile.domains = domains
-                 existingProfile.schedule = schedule
-                 existingProfile.disableBackgroundStops = disableBackgroundStops
-                 
-                 // Schedule restrictions
-                 DeviceActivityCenterUtil.scheduleRestrictions(for: existingProfile)
-                 
-                 // Call the callback to notify that the profile was updated
-                 onProfileCreated?(existingProfile)
-             } else {
-                 // Create new profile
-                 let newProfile = try BlockedProfiles.createProfile(
-                     in: modelContext,
-                     name: name,
-                     selection: selectedActivity,
-                     blockingStrategyId: ManualBlockingStrategy.id,
-                     enableLiveActivity: enableLiveActivity,
-                     reminderTimeInSeconds: reminderTimeSeconds,
-                     customReminderMessage: customReminderMessage,
-                     enableBreaks: enableBreaks,
-                     enableStrictMode: enableStrictMode,
-                     enableAllowMode: enableAllowMode,
-                     enableAllowModeDomains: enableAllowModeDomains,
-                     domains: domains,
-                     physicalUnblockNFCTagId: nil,
-                     physicalUnblockQRCodeId: nil,
-                     schedule: schedule,
-                     disableBackgroundStops: disableBackgroundStops
-                 )
-                 
-                 // Schedule restrictions
-                 DeviceActivityCenterUtil.scheduleRestrictions(for: newProfile)
-                 
-                 // Call the callback to notify that a new profile was created
-                 onProfileCreated?(newProfile)
-             }
-             
-             dismiss()
-         } catch {
-             errorMessage = error.localizedDescription
-             showError = true
-         }
-     }
+    func saveProfile() {
+        // Check for duplicate names (only for new profiles or when name changed)
+        if profileToEdit == nil || profileToEdit?.name.lowercased() != name.lowercased() {
+            let existingProfiles = try? modelContext.fetch(FetchDescriptor<BlockedProfiles>())
+            if let profiles = existingProfiles {
+                let duplicateName = profiles.contains { $0.name.lowercased() == name.lowercased() }
+                if duplicateName {
+                    showError(message: "A mode with this name already exists. Please choose a different name.")
+                    return
+                }
+            }
+        }
+        
+        do {
+            // Update schedule date
+            schedule.updatedAt = Date()
+            
+            // Calculate reminder time in seconds or nil if disabled
+            let reminderTimeSeconds: UInt32? =
+                enableReminder ? UInt32(reminderTimeInMinutes * 60) : nil
+            
+            if let existingProfile = profileToEdit {
+                // Update existing profile
+                existingProfile.name = name
+                existingProfile.selectedActivity = selectedActivity
+                existingProfile.enableLiveActivity = enableLiveActivity
+                existingProfile.reminderTimeInSeconds = reminderTimeSeconds
+                existingProfile.customReminderMessage = customReminderMessage.isEmpty ? nil : customReminderMessage
+                existingProfile.enableBreaks = enableBreaks
+                existingProfile.enableStrictMode = enableStrictMode
+                existingProfile.enableAllowMode = enableAllowMode
+                existingProfile.enableAllowModeDomains = enableAllowModeDomains
+                existingProfile.domains = domains
+                existingProfile.schedule = schedule
+                existingProfile.disableBackgroundStops = disableBackgroundStops
+                
+                // Schedule restrictions
+                DeviceActivityCenterUtil.scheduleRestrictions(for: existingProfile)
+                
+                // Call the callback to notify that the profile was updated
+                onProfileCreated?(existingProfile)
+            } else {
+                // Create new profile with automatic blocklist
+                let newProfile = try BlockedProfiles.createProfileWithAutoBlocklist(
+                    in: modelContext,
+                    name: name,
+                    selection: selectedActivity,
+                    blockingStrategyId: ManualBlockingStrategy.id,
+                    enableLiveActivity: enableLiveActivity,
+                    reminderTimeInSeconds: reminderTimeSeconds,
+                    customReminderMessage: customReminderMessage,
+                    enableBreaks: enableBreaks,
+                    enableStrictMode: enableStrictMode,
+                    enableAllowMode: enableAllowMode,
+                    enableAllowModeDomains: enableAllowModeDomains,
+                    domains: domains,
+                    physicalUnblockNFCTagId: nil as String?,
+                    physicalUnblockQRCodeId: nil as String?,
+                    schedule: schedule,
+                    disableBackgroundStops: disableBackgroundStops
+                )
+                
+                // Schedule restrictions
+                DeviceActivityCenterUtil.scheduleRestrictions(for: newProfile)
+                
+                // Call the callback to notify that a new profile was created
+                onProfileCreated?(newProfile)
+            }
+            
+            dismiss()
+        } catch {
+            errorMessage = error.localizedDescription
+            showError = true
+        }
+    }
  }
 
  #Preview {
