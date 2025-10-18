@@ -206,6 +206,12 @@ struct NewModeModal: View {
             }
             .background(Color.white)
             .preferredColorScheme(.light)
+            .onAppear {
+                // Garantir que o nome seja carregado corretamente ao editar
+                if let profileToEdit = profileToEdit {
+                    name = profileToEdit.name
+                }
+            }
             .sheet(isPresented: $showingActivityPicker) {
                 AppPicker(
                     selection: $selectedActivity,

@@ -334,6 +334,10 @@ struct HomeView: View {
   }
 
   private func strategyButtonPress(_ profile: BlockedProfiles) {
+    // Adicionar vibração tátil
+    let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+    impactFeedback.impactOccurred()
+    
     saveLastUsedProfile(profile)
     strategyManager.toggleBlocking(context: context, activeProfile: profile)
     ratingManager.incrementLaunchCount()

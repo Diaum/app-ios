@@ -131,7 +131,8 @@ struct ProfileModalView: View {
         // Selecionar automaticamente o novo modo criado
         selectedProfile = newProfile
         profileToEdit = nil
-        dismiss()
+        showingNewModeModal = false // Fechar o NewModeModal
+        dismiss() // Fechar o ProfileModalView
       })
     }
   }
