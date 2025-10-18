@@ -81,7 +81,7 @@ struct NewModeModal: View {
                     VStack(alignment: .leading, spacing: 24) {
                         
                         // NAME
-                        section(title: "NAME") {
+                        section(title: "NAME", stepNumber: 1) {
                             TextField("Profile Name", text: $name)
                                 .font(.system(size: 14, weight: .regular, design: .monospaced))
                                 .padding(10)
@@ -90,7 +90,7 @@ struct NewModeModal: View {
                         }
                         
                         // BLOCKED APPS
-                        section(title: (enableAllowMode ? "ALLOWED" : "BLOCKED") + " APPS & WEBSITES") {
+                        section(title: (enableAllowMode ? "ALLOWED" : "BLOCKED") + " APPS & WEBSITES", stepNumber: 2) {
                             BlockedProfileAppSelector(
                                 selection: selectedActivity,
                                 buttonAction: { showingActivityPicker = true },
@@ -107,7 +107,7 @@ struct NewModeModal: View {
                         }
                         
                         // DOMAINS
-                        section(title: (enableAllowModeDomains ? "ALLOWED" : "BLOCKED") + " DOMAINS") {
+                        section(title: (enableAllowModeDomains ? "ALLOWED" : "BLOCKED") + " DOMAINS", stepNumber: 3) {
                             BlockedProfileDomainSelector(
                                 domains: domains,
                                 buttonAction: { showingDomainPicker = true },
@@ -124,7 +124,7 @@ struct NewModeModal: View {
                         }
                         
                         // SCHEDULE
-                        section(title: "SCHEDULE") {
+                        section(title: "SCHEDULE", stepNumber: 4) {
                             BlockedProfileScheduleSelector(
                                 schedule: schedule,
                                 buttonAction: { showingSchedulePicker = true },
@@ -133,7 +133,7 @@ struct NewModeModal: View {
                         }
                         
                         // SAFEGUARDS
-                        section(title: "SAFEGUARDS") {
+                        section(title: "SAFEGUARDS", stepNumber: 5) {
                             CustomToggle(title: "Breaks",
                                          description: "Have the option to take a single break, you choose when to start/stop the break",
                                          isOn: $enableBreaks, isDisabled: false)
@@ -148,7 +148,7 @@ struct NewModeModal: View {
                         }
                         
                         // NOTIFICATIONS
-                        section(title: "NOTIFICATIONS") {
+                        section(title: "NOTIFICATIONS", stepNumber: 6) {
                             CustomToggle(title: "Live Activity",
                                          description: "Shows a live activity on your lock screen with some inspirational quote",
                                          isOn: $enableLiveActivity, isDisabled: false)
@@ -241,15 +241,34 @@ struct NewModeModal: View {
     }
     
      @ViewBuilder
-     func section<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
-         VStack(alignment: .leading, spacing: 8) {
-             Text(title)
-                 .font(.system(size: 14, weight: .regular, design: .monospaced))
-                 .foregroundColor(.black)
-             content()
+     func section<Content: View>(title: String, stepNumber: Int, @ViewBuilder content: () -> Content) -> some View {
+         ZStack(alignment: .topLeading) {
+             VStack(alignment: .leading, spacing: 8) {
+                 Text(title)
+                     .font(.system(size: 14, weight: .regular, design: .monospaced))
+                     .foregroundColor(.black)
+                 content()
+             }
+             .padding()
+             .overlay(Rectangle().stroke(Color.black, lineWidth: 1))
+             
+             // Step indicator circle
+             HStack(spacing: 0) {
+                 Circle()
+                     .fill(Color.black)
+                     .frame(width: 24, height: 24)
+                     .overlay(
+                         Text("\(stepNumber)")
+                             .font(.system(size: 14, weight: .bold, design: .monospaced))
+                             .foregroundColor(.white)
+                     )
+                 
+                 Rectangle()
+                     .fill(Color.black)
+                     .frame(width: 1, height: 12)
+             }
+             .offset(x: -12, y: -12)
          }
-         .padding()
-         .overlay(Rectangle().stroke(Color.black, lineWidth: 1))
      }
      
      func showError(message: String) {
