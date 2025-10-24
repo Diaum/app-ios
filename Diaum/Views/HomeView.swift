@@ -61,115 +61,228 @@ struct HomeView: View {
   // MARK: - VIEW BODY (substituído e ajustado)
   var body: some View {
     ZStack {
-      // Fundo preto fosco
-      Color(red: 0.07, green: 0.07, blue: 0.07)
+      // Background - Dynamic theme based on blocking state
+      Color(isBlocking ? Color(red: 0x11/255.0, green: 0x11/255.0, blue: 0x11/255.0) : Color.white)
         .ignoresSafeArea()
-
+        .animation(.easeInOut(duration: 0.3), value: isBlocking)
+      
       VStack {
-        // Topo
-        HStack {
-          Spacer()
-          Text("FOCCO")
-          .font(.system(size: 28, weight: .black, design: .default))
-          Spacer()
+        if isBlocking {
+          // Dark theme layout (existing)
+          HStack {
+            Spacer()
+            Text("FOCCO")
+              .font(.system(size: 28, weight: .black, design: .default))
+            Spacer()
 
-          // Ícone de menu hamburguer
-          VStack(spacing: 5) {
-            ForEach(0..<3) { _ in
-              Rectangle()
-                .fill(Color.white)
-                .frame(width: 24, height: 2)
+            // Ícone de menu hamburguer
+            VStack(spacing: 5) {
+              ForEach(0..<3) { _ in
+                Rectangle()
+                  .fill(Color.white)
+                  .frame(width: 24, height: 2)
+              }
             }
+            .padding(.trailing, 28)
           }
-          .padding(.trailing, 28)
-        }
-        .padding(.top, 32)
+          .padding(.top, 32)
 
-        Spacer()
+          Spacer()
 
-        // Texto de instrução
-        Text(isBlocking ? "TAP TO UNFOCCO" : "TAP TO FOCCO")
-          .font(.system(size: 14, weight: .regular, design: .monospaced))
-          .foregroundColor(.white)
-          .tracking(2)
-          .padding(.bottom, 28)
+          // Texto de instrução
+          Text("TAP TO UNFOCCO")
+            .font(.system(size: 14, weight: .regular, design: .monospaced))
+            .foregroundColor(.white)
+            .tracking(2)
+            .padding(.bottom, 28)
 
-        // Botão principal
-        Button(action: {
-          if isBlocking {
+          // Botão principal
+          Button(action: {
             if let activeProfile = strategyManager.activeSession?.blockedProfile {
               strategyButtonPress(activeProfile)
             }
-          } else {
-            if let selectedProfile = selectedProfile {
-              strategyButtonPress(selectedProfile)
-            } else if profiles.isEmpty {
-              showNewProfileView = true
-            } else {
-              showProfileModal = true
-            }
-          }
-        }) {
-          ZStack {
-            RoundedRectangle(cornerRadius: 28)
-              .fill(Color(red: 0.11, green: 0.11, blue: 0.11))
-              .frame(width: 220, height: 220)
-              .shadow(color: Color.black.opacity(0.7), radius: 16, x: 0, y: 8)
-              .overlay(
-                RoundedRectangle(cornerRadius: 28)
-                  .stroke(Color.black.opacity(0.5), lineWidth: 3)
-                  .blur(radius: 2)
-              )
-              .overlay(
-                RoundedRectangle(cornerRadius: 28)
-                  .stroke(Color.white.opacity(0.05), lineWidth: 1)
-                  .offset(x: -1, y: -1)
-              )
-
-            Text("FOCCO")
-              .font(.system(size: 28, weight: .black, design: .default))
-          }
-        }
-        .buttonStyle(PlainButtonStyle())
-        .padding(.bottom, 36)
-
-        // Modo - Clickable when not blocking
-        VStack(spacing: 6) {
-          Text("MODE")
-            .font(.system(size: 12, weight: .regular, design: .monospaced))
-            .foregroundColor(.white.opacity(0.8))
-
-          Button(action: {
-            if !isBlocking {
-              showProfileModal = true
-            }
           }) {
-            Text(selectedProfile?.name ?? "BASIC")
-              .font(.system(size: 14, weight: .bold, design: .monospaced))
-              .foregroundColor(.black)
-              .padding(.horizontal, 24)
-              .padding(.vertical, 8)
-              .background(Color.white)
-              .cornerRadius(6)
+            ZStack {
+              RoundedRectangle(cornerRadius: 28)
+                .fill(Color(red: 0.11, green: 0.11, blue: 0.11))
+                .frame(width: 220, height: 220)
+                .shadow(color: Color.black.opacity(0.7), radius: 16, x: 0, y: 8)
+                .overlay(
+                  RoundedRectangle(cornerRadius: 28)
+                    .stroke(Color.black.opacity(0.5), lineWidth: 3)
+                    .blur(radius: 2)
+                )
+                .overlay(
+                  RoundedRectangle(cornerRadius: 28)
+                    .stroke(Color.white.opacity(0.05), lineWidth: 1)
+                    .offset(x: -1, y: -1)
+                )
+
+              Text("FOCCO")
+                .font(.system(size: 28, weight: .black, design: .default))
+            }
           }
           .buttonStyle(PlainButtonStyle())
-          .disabled(isBlocking)
+          .padding(.bottom, 36)
+
+          // Modo - Clickable when not blocking
+          VStack(spacing: 6) {
+            Text("MODE")
+              .font(.system(size: 12, weight: .regular, design: .monospaced))
+              .foregroundColor(.white.opacity(0.8))
+
+            Button(action: {
+              if !isBlocking {
+                showProfileModal = true
+              }
+            }) {
+              Text(selectedProfile?.name ?? "BASIC")
+                .font(.system(size: 14, weight: .bold, design: .monospaced))
+                .foregroundColor(.black)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 8)
+                .background(Color.white)
+                .cornerRadius(6)
+            }
+            .buttonStyle(PlainButtonStyle())
+            .disabled(isBlocking)
+          }
+
+          Spacer()
+
+          // Rodapé
+          VStack(spacing: 4) {
+            Text("YOU'VE BEEN FOCCUSED FOR")
+              .font(.system(size: 13, weight: .regular, design: .monospaced))
+              .foregroundColor(.white.opacity(0.8))
+
+            Text(formatElapsedTime(strategyManager.elapsedTime))
+              .font(.system(size: 14, weight: .semibold, design: .monospaced))
+              .foregroundColor(.white)
+          }
+          .padding(.bottom, 40)
+        } else {
+          // White theme layout (new)
+          VStack(spacing: 0) {
+            // Header
+            HStack {
+              Text("BRICK")
+                .font(.system(size: 24, weight: .bold, design: .default))
+                .foregroundColor(.black)
+              
+              Spacer()
+              
+              // Hamburger menu
+              VStack(spacing: 4) {
+                ForEach(0..<3) { _ in
+                  Rectangle()
+                    .fill(Color.black)
+                    .frame(width: 20, height: 2)
+                }
+              }
+            }
+            .padding(.horizontal, 24)
+            .padding(.top, 20)
+            
+            Spacer()
+            
+            // Main content
+            VStack(spacing: 32) {
+              // Instruction text
+              Text("TAP TO BRICK")
+                .font(.system(size: 16, weight: .medium, design: .default))
+                .foregroundColor(.black)
+                .tracking(1)
+              
+              // Main button with neumorphic effect
+              Button(action: {
+                if let selectedProfile = selectedProfile {
+                  strategyButtonPress(selectedProfile)
+                } else if profiles.isEmpty {
+                  showNewProfileView = true
+                } else {
+                  showProfileModal = true
+                }
+              }) {
+                ZStack {
+                  // Neumorphic button background
+                  RoundedRectangle(cornerRadius: 24)
+                    .fill(Color.white)
+                    .frame(width: 200, height: 200)
+                    .shadow(color: Color.black.opacity(0.1), radius: 8, x: 4, y: 4)
+                    .shadow(color: Color.white.opacity(0.8), radius: 8, x: -4, y: -4)
+                    .overlay(
+                      RoundedRectangle(cornerRadius: 24)
+                        .stroke(Color.gray.opacity(0.1), lineWidth: 1)
+                    )
+                  
+                  Text("BRICK™")
+                    .font(.system(size: 28, weight: .bold, design: .default))
+                    .foregroundColor(.black)
+                }
+              }
+              .buttonStyle(PlainButtonStyle())
+            }
+            
+            Spacer()
+            
+            // Mode selection section
+            VStack(spacing: 16) {
+              // Mode header with gear icon
+              HStack(spacing: 8) {
+                Text("MODE")
+                  .font(.system(size: 14, weight: .medium, design: .default))
+                  .foregroundColor(.gray)
+                
+                Image(systemName: "gearshape")
+                  .font(.system(size: 12))
+                  .foregroundColor(.gray)
+              }
+              
+              // Mode buttons
+              HStack(spacing: 12) {
+                // BASIC button (selected)
+                Button(action: {
+                  // BASIC mode logic
+                }) {
+                  Text("BASIC")
+                    .font(.system(size: 14, weight: .bold, design: .default))
+                    .foregroundColor(.black)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    .background(Color.white)
+                    .cornerRadius(8)
+                    .shadow(color: Color.black.opacity(0.1), radius: 2, x: 1, y: 1)
+                }
+                .buttonStyle(PlainButtonStyle())
+                
+                // SOCIAL button (unselected)
+                Button(action: {
+                  // SOCIAL mode logic
+                }) {
+                  Text("SOCIAL")
+                    .font(.system(size: 14, weight: .medium, design: .default))
+                    .foregroundColor(.gray)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(8)
+                }
+                .buttonStyle(PlainButtonStyle())
+              }
+              
+              // Pagination dots
+              HStack(spacing: 6) {
+                ForEach(0..<3) { index in
+                  Circle()
+                    .fill(index == 0 ? Color.black : Color.gray.opacity(0.3))
+                    .frame(width: 6, height: 6)
+                }
+              }
+            }
+            .padding(.bottom, 40)
+          }
         }
-
-        Spacer()
-
-        // Rodapé
-        VStack(spacing: 4) {
-          Text(isBlocking ? "YOU’VE BEEN FOCCUSED FOR" : "TOTAL BLOCKED TODAY")
-            .font(.system(size: 13, weight: .regular, design: .monospaced))
-            .foregroundColor(.white.opacity(0.8))
-
-          Text(isBlocking ? formatElapsedTime(strategyManager.elapsedTime)
-                          : formatElapsedTime(getDailyBlockedTime()))
-            .font(.system(size: 14, weight: .semibold, design: .monospaced))
-            .foregroundColor(.white)
-        }
-        .padding(.bottom, 40)
       }
     }
     .sheet(isPresented: $showProfileModal) {
