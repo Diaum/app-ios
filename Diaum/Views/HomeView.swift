@@ -58,224 +58,21 @@ struct HomeView: View {
         strategyManager.isBreakActive
     }
     
+    var backgroundColor: Color {
+        isBlocking ? Color(red: 0x11/255.0, green: 0x11/255.0, blue: 0x11/255.0) : Color.white
+    }
+    
     // MARK: - VIEW BODY
     var body: some View {
         ZStack {
-            // Background
-            Color(isBlocking ? Color(red: 0x11/255.0, green: 0x11/255.0, blue: 0x11/255.0) : Color.white)
+            backgroundColor
                 .ignoresSafeArea()
                 .animation(.easeInOut(duration: 0.3), value: isBlocking)
             
-            VStack(spacing: 0) {
-                if isBlocking {
-                    // MARK: Dark Mode Layout
-                    VStack(spacing: 0) {
-                        // Header
-                        HStack {
-                            Text("FOCCO")
-                                .font(.system(size: 24, weight: .bold, design: .default))
-                                .foregroundColor(.white)
-                            
-                            Spacer()
-                            
-                            VStack(spacing: 4) {
-                                ForEach(0..<3) { _ in
-                                    Rectangle()
-                                        .fill(Color.white)
-                                        .frame(width: 20, height: 2)
-                                }
-                            }
-                        }
-                        .padding(.horizontal, 24)
-                        .padding(.top, 20)
-                        
-                        Spacer()
-                        
-                        // Main content
-                        VStack(spacing: 0) {
-                            Text("TAP TO UNFOCCO")
-                                .font(.system(size: 16, weight: .medium, design: .default))
-                                .foregroundColor(.white)
-                                .tracking(1)
-                                .padding(.bottom, 32)
-                            
-                            Button(action: {
-                                if let activeProfile = strategyManager.activeSession?.blockedProfile {
-                                    strategyButtonPress(activeProfile)
-                                }
-                            }) {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 24)
-                                        .fill(Color(red: 0x1a/255.0, green: 0x1a/255.0, blue: 0x1a/255.0))
-                                        .frame(width: 200, height: 200)
-                                        .shadow(color: Color.black.opacity(0.8), radius: 8, x: 4, y: 4)
-                                        .shadow(color: Color.white.opacity(0.1), radius: 8, x: -4, y: -4)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 24)
-                                                .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                                        )
-                                    
-                                    HStack(spacing: 0) {
-                                        Text("FOCCO")
-                                            .font(.system(size: 28, weight: .black, design: .default))
-                                            .foregroundColor(.white)
-                                        Text("™")
-                                            .font(.system(size: 12))
-                                            .foregroundColor(.white)
-                                            .baselineOffset(8)
-                                    }
-                                }
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                            .padding(.bottom, 32)
-                            
-                            VStack(spacing: 16) {
-                                HStack(spacing: 8) {
-                                    Text("MODE")
-                                        .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(.white.opacity(0.6))
-                                    Image(systemName: "gearshape")
-                                        .font(.system(size: 12))
-                                        .foregroundColor(.white.opacity(0.6))
-                                }
-                                
-                                HStack(spacing: 12) {
-                                    Button("BASIC") { }
-                                        .font(.system(size: 14, weight: .bold))
-                                        .foregroundColor(.white)
-                                        .padding(.horizontal, 20)
-                                        .padding(.vertical, 10)
-                                        .background(Color(red: 0.1, green: 0.1, blue: 0.1))
-                                        .cornerRadius(8)
-                                        .shadow(color: .black.opacity(0.5), radius: 2, x: 1, y: 1)
-                                    
-                                    Button("SOCIAL") { }
-                                        .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(.white.opacity(0.4))
-                                        .padding(.horizontal, 20)
-                                        .padding(.vertical, 10)
-                                        .background(Color.white.opacity(0.1))
-                                        .cornerRadius(8)
-                                }
-                                
-                                HStack(spacing: 6) {
-                                    ForEach(0..<3) { index in
-                                        Circle()
-                                            .fill(index == 0 ? Color.white : Color.white.opacity(0.3))
-                                            .frame(width: 6, height: 6)
-                                    }
-                                }
-                            }
-                            .padding(.bottom, 40)
-                        }
-                        Spacer()
-                    }
-                } else {
-                    // MARK: Light Mode Layout
-                    VStack(spacing: 0) {
-                        HStack {
-                            Text("FOCCO")
-                                .font(.system(size: 24, weight: .black))
-                                .foregroundColor(.black)
-                            
-                            Spacer()
-                            
-                            VStack(spacing: 4) {
-                                ForEach(0..<3) { _ in
-                                    Rectangle()
-                                        .fill(Color.black)
-                                        .frame(width: 20, height: 2)
-                                }
-                            }
-                        }
-                        .padding(.horizontal, 24)
-                        .padding(.top, 20)
-                        
-                        Spacer()
-                        
-                        VStack(spacing: 0) {
-                            Text("TAP TO FOCCO")
-                                .font(.system(size: 16, weight: .medium))
-                                .foregroundColor(.black)
-                                .tracking(1)
-                                .padding(.bottom, 32)
-                            
-                            Button(action: {
-                                if let selectedProfile = selectedProfile {
-                                    strategyButtonPress(selectedProfile)
-                                } else if profiles.isEmpty {
-                                    showNewProfileView = true
-                                } else {
-                                    showProfileModal = true
-                                }
-                            }) {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 24)
-                                        .fill(Color.white)
-                                        .frame(width: 200, height: 200)
-                                        .shadow(color: .black.opacity(0.1), radius: 8, x: 4, y: 4)
-                                        .shadow(color: .white.opacity(0.8), radius: 8, x: -4, y: -4)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 24)
-                                                .stroke(Color.gray.opacity(0.1), lineWidth: 1)
-                                        )
-                                    
-                                    HStack(spacing: 0) {
-                                        Text("FOCCO")
-                                            .font(.system(size: 28, weight: .black))
-                                            .foregroundColor(.black)
-                                        Text("™")
-                                            .font(.system(size: 12))
-                                            .foregroundColor(.black)
-                                            .baselineOffset(8)
-                                    }
-                                }
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                            .padding(.bottom, 32)
-                            
-                            VStack(spacing: 16) {
-                                HStack(spacing: 8) {
-                                    Text("MODE")
-                                        .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(.gray)
-                                    Image(systemName: "gearshape")
-                                        .font(.system(size: 12))
-                                        .foregroundColor(.gray)
-                                }
-                                
-                                HStack(spacing: 12) {
-                                    Button("BASIC") { }
-                                        .font(.system(size: 14, weight: .bold))
-                                        .foregroundColor(.black)
-                                        .padding(.horizontal, 20)
-                                        .padding(.vertical, 10)
-                                        .background(Color.white)
-                                        .cornerRadius(8)
-                                        .shadow(color: .black.opacity(0.1), radius: 2, x: 1, y: 1)
-                                    
-                                    Button("SOCIAL") { }
-                                        .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(.gray)
-                                        .padding(.horizontal, 20)
-                                        .padding(.vertical, 10)
-                                        .background(Color.gray.opacity(0.1))
-                                        .cornerRadius(8)
-                                }
-                                
-                                HStack(spacing: 6) {
-                                    ForEach(0..<3) { index in
-                                        Circle()
-                                            .fill(index == 0 ? Color.black : Color.gray.opacity(0.3))
-                                            .frame(width: 6, height: 6)
-                                    }
-                                }
-                            }
-                            .padding(.bottom, 40)
-                        }
-                        Spacer()
-                    }
-                }
+            if isBlocking {
+                darkModeView
+            } else {
+                lightModeView
             }
         }
         .sheet(isPresented: $showProfileModal) {
@@ -355,6 +152,231 @@ struct HomeView: View {
         }
     }
     
+    // MARK: - DARK MODE VIEW
+    private var darkModeView: some View {
+        VStack(spacing: 0) {
+            // Header
+            HStack {
+                Text("FOCCO")
+                    .font(.system(size: 24, weight: .bold, design: .default))
+                    .foregroundColor(.white)
+                
+                Spacer()
+                
+                VStack(spacing: 4) {
+                    ForEach(0..<3) { _ in
+                        Rectangle()
+                            .fill(Color.white)
+                            .frame(width: 20, height: 2)
+                    }
+                }
+            }
+            .padding(.horizontal, 24)
+            .padding(.top, 20)
+            
+            Spacer()
+            
+            // Main content
+            VStack(spacing: 0) {
+                Text("TAP TO UNFOCCO")
+                    .font(.system(size: 16, weight: .medium, design: .default))
+                    .foregroundColor(.white)
+                    .tracking(1)
+                    .padding(.bottom, 32)
+                
+                Button(action: {
+                    if let activeProfile = strategyManager.activeSession?.blockedProfile {
+                        strategyButtonPress(activeProfile)
+                    }
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 24)
+                            .fill(Color(red: 0x1a/255.0, green: 0x1a/255.0, blue: 0x1a/255.0))
+                            .frame(width: 200, height: 200)
+                            .shadow(color: Color.black.opacity(0.8), radius: 8, x: 4, y: 4)
+                            .shadow(color: Color.white.opacity(0.1), radius: 8, x: -4, y: -4)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 24)
+                                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                            )
+                        
+                        HStack(spacing: 0) {
+                            Text("FOCCO")
+                                .font(.system(size: 28, weight: .black, design: .default))
+                                .foregroundColor(.white)
+                            Text("™")
+                                .font(.system(size: 12))
+                                .foregroundColor(.white)
+                                .baselineOffset(8)
+                        }
+                    }
+                }
+                .buttonStyle(PlainButtonStyle())
+                .padding(.bottom, 32)
+                
+                VStack(spacing: 16) {
+                    HStack(spacing: 8) {
+                        Text("MODE")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.white.opacity(0.6))
+                        Image(systemName: "gearshape")
+                            .font(.system(size: 12))
+                            .foregroundColor(.white.opacity(0.6))
+                    }
+                    
+                    HStack(spacing: 12) {
+                        Button("BASIC") { }
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 10)
+                            .background(Color(red: 0.1, green: 0.1, blue: 0.1))
+                            .cornerRadius(8)
+                            .shadow(color: .black.opacity(0.5), radius: 2, x: 1, y: 1)
+                        
+                        Button("SOCIAL") { }
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.white.opacity(0.4))
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 10)
+                            .background(Color.white.opacity(0.1))
+                            .cornerRadius(8)
+                    }
+                    
+                    HStack(spacing: 6) {
+                        ForEach(0..<3) { index in
+                            Circle()
+                                .fill(index == 0 ? Color.white : Color.white.opacity(0.3))
+                                .frame(width: 6, height: 6)
+                        }
+                    }
+                }
+                .padding(.bottom, 40)
+                
+                // Timer section
+                VStack(spacing: 8) {
+                    Text("YOU'VE BEEN BLOCKED FOR")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(.white.opacity(0.6))
+                        .tracking(0.5)
+                    
+                    Text(formatElapsedTime(calculateElapsedTime()))
+                        .font(.system(size: 16, weight: .bold, design: .monospaced))
+                        .foregroundColor(.white)
+                }
+                .padding(.bottom, 20)
+            }
+            Spacer()
+        }
+    }
+    
+    // MARK: - LIGHT MODE VIEW
+    private var lightModeView: some View {
+        VStack(spacing: 0) {
+            HStack {
+                Text("FOCCO")
+                    .font(.system(size: 24, weight: .black))
+                    .foregroundColor(.black)
+                
+                Spacer()
+                
+                VStack(spacing: 4) {
+                    ForEach(0..<3) { _ in
+                        Rectangle()
+                            .fill(Color.black)
+                            .frame(width: 20, height: 2)
+                    }
+                }
+            }
+            .padding(.horizontal, 24)
+            .padding(.top, 20)
+            
+            Spacer()
+            
+            VStack(spacing: 0) {
+                Text("TAP TO FOCCO")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.black)
+                    .tracking(1)
+                    .padding(.bottom, 32)
+                
+                Button(action: {
+                    if let selectedProfile = selectedProfile {
+                        strategyButtonPress(selectedProfile)
+                    } else if profiles.isEmpty {
+                        showNewProfileView = true
+                    } else {
+                        showProfileModal = true
+                    }
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 24)
+                            .fill(Color.white)
+                            .frame(width: 200, height: 200)
+                            .shadow(color: .black.opacity(0.1), radius: 8, x: 4, y: 4)
+                            .shadow(color: .white.opacity(0.8), radius: 8, x: -4, y: -4)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 24)
+                                    .stroke(Color.gray.opacity(0.1), lineWidth: 1)
+                            )
+                        
+                        HStack(spacing: 0) {
+                            Text("FOCCO")
+                                .font(.system(size: 28, weight: .black))
+                                .foregroundColor(.black)
+                            Text("™")
+                                .font(.system(size: 12))
+                                .foregroundColor(.black)
+                                .baselineOffset(8)
+                        }
+                    }
+                }
+                .buttonStyle(PlainButtonStyle())
+                .padding(.bottom, 32)
+                
+                VStack(spacing: 16) {
+                    HStack(spacing: 8) {
+                        Text("MODE")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.gray)
+                        Image(systemName: "gearshape")
+                            .font(.system(size: 12))
+                            .foregroundColor(.gray)
+                    }
+                    
+                    HStack(spacing: 12) {
+                        Button("BASIC") { }
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundColor(.black)
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 10)
+                            .background(Color.white)
+                            .cornerRadius(8)
+                            .shadow(color: .black.opacity(0.1), radius: 2, x: 1, y: 1)
+                        
+                        Button("SOCIAL") { }
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.gray)
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 10)
+                            .background(Color.gray.opacity(0.1))
+                            .cornerRadius(8)
+                    }
+                    
+                    HStack(spacing: 6) {
+                        ForEach(0..<3) { index in
+                            Circle()
+                                .fill(index == 0 ? Color.black : Color.gray.opacity(0.3))
+                                .frame(width: 6, height: 6)
+                        }
+                    }
+                }
+                .padding(.bottom, 40)
+            }
+            Spacer()
+        }
+    }
+    
     // MARK: - FUNÇÕES
     
     private func toggleSessionFromDeeplink(_ profileId: String, link: URL) {
@@ -410,6 +432,15 @@ struct HomeView: View {
     }
     
     private func dismissAlert() { showingAlert = false }
+    
+    private func calculateElapsedTime() -> TimeInterval {
+        guard let session = strategyManager.activeSession else { return 0 }
+        
+        let startTime = session.startTime
+        let endTime = session.endTime ?? Date()
+        
+        return endTime.timeIntervalSince(startTime)
+    }
     
     private func formatElapsedTime(_ timeInterval: TimeInterval) -> String {
         let hours = Int(timeInterval) / 3600
