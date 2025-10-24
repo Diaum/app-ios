@@ -20,33 +20,22 @@ struct DiaumWidgetAttributes: ActivityAttributes {
 struct DiaumWidgetLiveActivity: Widget {
   var body: some WidgetConfiguration {
     ActivityConfiguration(for: DiaumWidgetAttributes.self) { context in
-      // Lock screen/banner UI with dark design
+      // Lock screen/banner UI with black background and white border
       VStack(spacing: 0) {
-        // Top section: App name with hourglass icon
-        HStack(spacing: 8) {
-          Image(systemName: "hourglass")
-            .font(.system(size: 18, weight: .medium, design: .monospaced))
-            .foregroundColor(.white)
-          
-          Text("Diaum")
-            .font(.system(size: 20, weight: .bold, design: .monospaced))
-            .foregroundColor(.white)
-        }
-        .padding(.top, 16)
-        
         Spacer()
         
-        // Bottom section: Timer or break indicator
-        VStack(spacing: 6) {
+        // Centered content with proper spacing
+        VStack(spacing: 8) {
+          // Top section: App name (centered, uppercase)
+          Text("FOCCO")
+            .font(.system(size: 18, weight: .bold, design: .monospaced))
+            .foregroundColor(.white)
+          
+          // Bottom section: Timer or break indicator (centered)
           if context.state.isBreakActive {
-            HStack(spacing: 4) {
-              Image(systemName: "cup.and.saucer.fill")
-                .font(.system(size: 16, weight: .medium, design: .monospaced))
-                .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
-              Text("On a Break")
-                .font(.system(size: 28, weight: .semibold, design: .monospaced))
-                .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
-            }
+            Text("On a Break")
+              .font(.system(size: 16, weight: .regular, design: .monospaced))
+              .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
           } else {
             Text(
               Date(
@@ -55,15 +44,21 @@ struct DiaumWidgetLiveActivity: Widget {
               ),
               style: .timer
             )
-            .font(.system(size: 28, weight: .semibold, design: .monospaced))
+            .font(.system(size: 16, weight: .regular, design: .monospaced))
             .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
           }
         }
-        .padding(.bottom, 16)
+        
+        Spacer()
       }
+      .padding(2) // 2px padding from all sides
       .frame(width: 320, height: 100)
-      .background(Color(red: 0.047, green: 0.047, blue: 0.047)) // #0C0C0C
-      .cornerRadius(24)
+      .background(Color.black) // #000000
+      .overlay(
+        RoundedRectangle(cornerRadius: 14)
+          .stroke(Color.white, lineWidth: 1.5)
+      )
+      .cornerRadius(14)
       .shadow(color: .black.opacity(0.5), radius: 12, x: 0, y: 0)
 
     } dynamicIsland: { context in

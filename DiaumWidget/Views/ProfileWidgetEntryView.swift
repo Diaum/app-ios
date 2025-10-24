@@ -46,34 +46,23 @@ struct ProfileWidgetEntryView: View {
 
   var body: some View {
     ZStack {
-      // Main content with dark background and rounded corners
+      // Main content with black background, white border and rounded corners
       VStack(spacing: 0) {
-        // Top section: Profile name with hourglass icon
-        HStack(spacing: 8) {
-          Image(systemName: "hourglass")
-            .font(.system(size: 18, weight: .medium, design: .monospaced))
-            .foregroundColor(.white)
-          
-          Text(entry.profileName ?? "No Profile")
-            .font(.system(size: 20, weight: .bold, design: .monospaced))
-            .foregroundColor(.white)
-            .lineLimit(1)
-        }
-        .padding(.top, 16)
-        
         Spacer()
         
-        // Bottom section: Status message or timer
-        VStack(spacing: 6) {
+        // Centered content with proper spacing
+        VStack(spacing: 8) {
+          // Top section: Profile name (centered, uppercase)
+          Text((entry.profileName ?? "No Profile").uppercased())
+            .font(.system(size: 18, weight: .bold, design: .monospaced))
+            .foregroundColor(.white)
+            .lineLimit(1)
+          
+          // Bottom section: Status message or timer (centered)
           if entry.isBreakActive {
-            HStack(spacing: 4) {
-              Image(systemName: "cup.and.saucer.fill")
-                .font(.system(size: 16, weight: .medium, design: .monospaced))
-                .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
-              Text("On a Break")
-                .font(.system(size: 28, weight: .semibold, design: .monospaced))
-                .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
-            }
+            Text("On a Break")
+              .font(.system(size: 16, weight: .regular, design: .monospaced))
+              .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
           } else if entry.isSessionActive {
             if let startTime = entry.sessionStartTime {
               Text(
@@ -83,22 +72,28 @@ struct ProfileWidgetEntryView: View {
                 ),
                 style: .timer
               )
-              .font(.system(size: 28, weight: .semibold, design: .monospaced))
+              .font(.system(size: 16, weight: .regular, design: .monospaced))
               .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
             }
           } else {
             Link(destination: linkToOpen) {
               Text(quickLaunchEnabled ? "Tap to launch" : "Tap to open")
-                .font(.system(size: 28, weight: .semibold, design: .monospaced))
+                .font(.system(size: 16, weight: .regular, design: .monospaced))
                 .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
             }
           }
         }
-        .padding(.bottom, 16)
+        
+        Spacer()
       }
+      .padding(2) // 2px padding from all sides
       .frame(width: 320, height: 100)
-      .background(Color(red: 0.047, green: 0.047, blue: 0.047)) // #0C0C0C
-      .cornerRadius(24)
+      .background(Color.black) // #000000
+      .overlay(
+        RoundedRectangle(cornerRadius: 14)
+          .stroke(Color.white, lineWidth: 1.5)
+      )
+      .cornerRadius(14)
       .shadow(color: .black.opacity(0.5), radius: 12, x: 0, y: 0)
       .blur(radius: isUnavailable ? 3 : 0)
 
@@ -109,18 +104,23 @@ struct ProfileWidgetEntryView: View {
             .font(.system(size: 18, weight: .medium, design: .monospaced))
             .foregroundColor(.orange)
 
-          Text("Unavailable")
-            .font(.system(size: 20, weight: .bold, design: .monospaced))
+          Text("UNAVAILABLE")
+            .font(.system(size: 18, weight: .bold, design: .monospaced))
             .foregroundColor(.white)
 
           Text("Different profile active")
-            .font(.system(size: 16, weight: .medium, design: .monospaced))
+            .font(.system(size: 16, weight: .regular, design: .monospaced))
             .foregroundColor(Color(red: 0.75, green: 0.75, blue: 0.75))
             .multilineTextAlignment(.center)
         }
+        .padding(2) // 2px padding from all sides
         .frame(width: 320, height: 100)
-        .background(Color(red: 0.047, green: 0.047, blue: 0.047).opacity(0.9))
-        .cornerRadius(24)
+        .background(Color.black.opacity(0.9))
+        .overlay(
+          RoundedRectangle(cornerRadius: 14)
+            .stroke(Color.white, lineWidth: 1.5)
+        )
+        .cornerRadius(14)
       }
     }
   }

@@ -42,9 +42,9 @@ struct ProfileModalView: View {
   var body: some View {
     NavigationStack {
       VStack(spacing: 0) {
-        // Header with BRICK MODES title
+        // Header with MODES title
         HStack {
-          Text("BRICK MODES")
+          Text("MODES")
             .font(.system(size: 32, weight: .bold, design: .monospaced))
             .foregroundColor(.black)
           

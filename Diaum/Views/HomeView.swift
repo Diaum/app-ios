@@ -57,261 +57,112 @@ struct HomeView: View {
   var isBreakActive: Bool {
     return strategyManager.isBreakActive
   }
-  
-  // Computed properties for profile button colors
-  private var profileButtonTextColor: Color {
-    if isBlocking {
-      return .white.opacity(0.8) // Mudado para branco mais claro quando bloqueando
-    } else {
-      return .black.opacity(0.8)
-    }
-  }
-  
-  private var profileButtonStrokeColor: Color {
-    if isBlocking {
-      return .white.opacity(0.4) // Mudado para branco quando bloqueando
-    } else {
-      return .black.opacity(0.4)
-    }
-  }
-  
-  private var profileButtonFillColor: Color {
-    if isBlocking {
-      return .white.opacity(0.1) // Mudado para branco quando bloqueando
-    } else {
-      return .white.opacity(0.2)
-    }
-  }
 
+  // MARK: - VIEW BODY (substituído e ajustado)
   var body: some View {
     ZStack {
-      // Background - Dynamic theme
-      Color(isBlocking ? Color(red: 0.07, green: 0.07, blue: 0.07) : Color.white)
+      // Fundo preto fosco
+      Color(red: 0.07, green: 0.07, blue: 0.07)
         .ignoresSafeArea()
-        .animation(.easeInOut(duration: 0.3), value: isBlocking)
-      
-      VStack(spacing: 0) {
+
+      VStack {
+        // Topo
+        HStack {
           Spacer()
-        
-        // Main Content - Centered vertically and horizontally
-        VStack(spacing: 16) {
-          // Label Above Button - Always visible
-          Text(isBlocking ? "TAP TO UNBRICK" : "TAP TO BRICK")
-            .font(.system(size: 16, weight: .regular, design: .monospaced))
-            .foregroundColor(isBlocking ? .white : .black)
-            .multilineTextAlignment(.center)
-            .animation(.easeInOut(duration: 0.3), value: isBlocking)
-          
-          // Main BRICK Button
-          Button(action: {
-            if isBlocking {
-              if let activeProfile = strategyManager.activeSession?.blockedProfile {
-                strategyButtonPress(activeProfile)
-              }
-            } else {
-              // Only allow blocking if there's a valid profile selected
-              if let selectedProfile = selectedProfile {
-                strategyButtonPress(selectedProfile)
-              } else if profiles.isEmpty {
-                showNewProfileView = true
-              } else {
-                // Show profile selection if no profile is selected
-                showProfileModal = true
-              }
-            }
-          }) {
-            ZStack {
-              // Button background with enhanced lighting and shadow
-              RoundedRectangle(cornerRadius: 16)
-                .fill(
-                  LinearGradient(
-                    gradient: Gradient(colors: isBlocking ? [
-                      Color(red: 0.55, green: 0.55, blue: 0.62), // Dark theme
-                      Color(red: 0.42, green: 0.42, blue: 0.48)
-                    ] : [
-                      Color(red: 0.15, green: 0.15, blue: 0.20), // Black when unlocked
-                      Color(red: 0.10, green: 0.10, blue: 0.15)
-                    ]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                  )
-                )
-                .frame(width: 120, height: 120)
-                .overlay(
-                  RoundedRectangle(cornerRadius: 16)
-                    .stroke(
-                      LinearGradient(
-                        gradient: Gradient(colors: isBlocking ? [
-                          Color.white.opacity(0.3),
-                          Color.clear,
-                          Color.black.opacity(0.2)
-                        ] : [
-                          Color.white.opacity(0.4),
-                          Color.clear,
-                          Color.black.opacity(0.3)
-                        ]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                      ),
-                      lineWidth: isBlocking ? 1 : 2
-                    )
-                )
-                .shadow(color: isBlocking ? .black.opacity(0.3) : .black.opacity(0.4), radius: isBlocking ? 8 : 12, x: 0, y: isBlocking ? 4 : 6)
-                .shadow(color: isBlocking ? .white.opacity(0.1) : .white.opacity(0.2), radius: isBlocking ? 2 : 4, x: 0, y: isBlocking ? -1 : -2)
-                .animation(.easeInOut(duration: 0.3), value: isBlocking)
-              
-              // Button text
-              Text("BRICK")
-                .font(.system(size: 18, weight: .medium, design: .monospaced))
-                .foregroundColor(.white) // Always white since button is always dark
-                .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
-                .animation(.easeInOut(duration: 0.3), value: isBlocking)
+          Text("FOCCO")
+          .font(.system(size: 28, weight: .black, design: .default))
+          Spacer()
+
+          // Ícone de menu hamburguer
+          VStack(spacing: 5) {
+            ForEach(0..<3) { _ in
+              Rectangle()
+                .fill(Color.white)
+                .frame(width: 24, height: 2)
             }
           }
-          .buttonStyle(PlainButtonStyle())
-          
-          // Label Below Button - Profile Name (Clickable)
-          Button(action: {
-            if !isBlocking {
+          .padding(.trailing, 28)
+        }
+        .padding(.top, 32)
+
+        Spacer()
+
+        // Texto de instrução
+        Text(isBlocking ? "TAP TO UNFOCCO" : "TAP TO FOCCO")
+          .font(.system(size: 14, weight: .regular, design: .monospaced))
+          .foregroundColor(.white)
+          .tracking(2)
+          .padding(.bottom, 28)
+
+        // Botão principal
+        Button(action: {
+          if isBlocking {
+            if let activeProfile = strategyManager.activeSession?.blockedProfile {
+              strategyButtonPress(activeProfile)
+            }
+          } else {
+            if let selectedProfile = selectedProfile {
+              strategyButtonPress(selectedProfile)
+            } else if profiles.isEmpty {
+              showNewProfileView = true
+            } else {
               showProfileModal = true
             }
-          }) {
-            Text(selectedProfile?.name ?? "MODE")
-              .font(.system(size: 14, weight: .medium, design: .monospaced))
-              .foregroundColor(profileButtonTextColor)
-              .padding(.horizontal, 20)
-              .padding(.vertical, 10)
-              .background(
-                RoundedRectangle(cornerRadius: 16)
-                  .stroke(profileButtonStrokeColor, lineWidth: 2)
-                  .background(
-                    RoundedRectangle(cornerRadius: 16)
-                      .fill(profileButtonFillColor)
-                  )
+          }
+        }) {
+          ZStack {
+            RoundedRectangle(cornerRadius: 28)
+              .fill(Color(red: 0.11, green: 0.11, blue: 0.11))
+              .frame(width: 220, height: 220)
+              .shadow(color: Color.black.opacity(0.7), radius: 16, x: 0, y: 8)
+              .overlay(
+                RoundedRectangle(cornerRadius: 28)
+                  .stroke(Color.black.opacity(0.5), lineWidth: 3)
+                  .blur(radius: 2)
               )
-              .animation(.easeInOut(duration: 0.3), value: isBlocking)
+              .overlay(
+                RoundedRectangle(cornerRadius: 28)
+                  .stroke(Color.white.opacity(0.05), lineWidth: 1)
+                  .offset(x: -1, y: -1)
+              )
+
+            Text("FOCCO")
+              .font(.system(size: 28, weight: .black, design: .default))
           }
-          .buttonStyle(PlainButtonStyle())
-          .disabled(isBlocking)
-          
-          // Timer Counter - Always visible with different content
-          VStack(spacing: 4) {
-            if isBlocking {
-              Text("YOU'VE BEEN BRICKED FOR")
-                .font(.system(size: 12, weight: .regular, design: .monospaced))
-                .foregroundColor(.white.opacity(0.6))
-              
-              Text(formatElapsedTime(strategyManager.elapsedTime))
-                .font(.system(size: 12, weight: .regular, design: .monospaced))
-                .foregroundColor(.white.opacity(0.6))
-            } else {
-              Text("TOTAL BLOCKED TODAY")
-                .font(.system(size: 12, weight: .regular, design: .monospaced))
-                .foregroundColor(.black.opacity(0.6))
-              
-              Text(formatElapsedTime(getDailyBlockedTime()))
-                .font(.system(size: 12, weight: .regular, design: .monospaced))
-                .foregroundColor(.black.opacity(0.6))
-            }
-          }
-          .animation(.easeInOut(duration: 0.3), value: isBlocking)
         }
-        
+        .buttonStyle(PlainButtonStyle())
+        .padding(.bottom, 36)
+
+        // Modo
+        VStack(spacing: 6) {
+          Text("MODE")
+            .font(.system(size: 12, weight: .regular, design: .monospaced))
+            .foregroundColor(.white.opacity(0.8))
+
+          Text("BASIC")
+            .font(.system(size: 14, weight: .bold, design: .monospaced))
+            .foregroundColor(.black)
+            .padding(.horizontal, 24)
+            .padding(.vertical, 8)
+            .background(Color.white)
+            .cornerRadius(6)
+        }
+
         Spacer()
-      }
-    }
-    .refreshable {
-      loadApp()
-    }
-    .sheet(isPresented: $isProfileListPresent) {
-      BlockedProfileListView()
-    }
-    .frame(
-      minWidth: 0,
-      maxWidth: .infinity,
-      minHeight: 0,
-      maxHeight: .infinity,
-      alignment: .topLeading
-    )
-    .onChange(of: navigationManager.profileId) { _, newValue in
-      if let profileId = newValue, let url = navigationManager.link {
-        toggleSessionFromDeeplink(profileId, link: url)
-        navigationManager.clearNavigation()
-      }
-    }
-    .onChange(of: navigationManager.navigateToProfileId) { _, newValue in
-      if let profileId = newValue {
-        navigateToProfileId = UUID(uuidString: profileId)
-        navigationManager.clearNavigation()
-      }
-    }
-    .onChange(of: requestAuthorizer.isAuthorized) { _, newValue in
-      if newValue {
-        showIntroScreen = false
-      } else {
-        showIntroScreen = true
-      }
-    }
-    .onChange(of: profiles) { oldValue, newValue in
-      if !newValue.isEmpty {
-        loadApp()
-        // Auto-select first profile if none selected
-        if selectedProfile == nil {
-          selectedProfile = newValue.first
+
+        // Rodapé
+        VStack(spacing: 4) {
+          Text(isBlocking ? "YOU’VE BEEN FOCCUSED FOR" : "TOTAL BLOCKED TODAY")
+            .font(.system(size: 13, weight: .regular, design: .monospaced))
+            .foregroundColor(.white.opacity(0.8))
+
+          Text(isBlocking ? formatElapsedTime(strategyManager.elapsedTime)
+                          : formatElapsedTime(getDailyBlockedTime()))
+            .font(.system(size: 14, weight: .semibold, design: .monospaced))
+            .foregroundColor(.white)
         }
+        .padding(.bottom, 40)
       }
-    }
-    .onChange(of: scenePhase) { oldPhase, newPhase in
-      if newPhase == .active {
-        loadApp()
-      } else if newPhase == .background {
-        unloadApp()
-      }
-    }
-    .onReceive(strategyManager.$errorMessage) { errorMessage in
-      if let message = errorMessage {
-        showErrorAlert(message: message)
-      }
-    }
-    .onAppear {
-      onAppearApp()
-    }
-    .sheet(isPresented: $showIntroScreen) {
-      IntroView {
-        requestAuthorizer.requestAuthorization()
-      }.interactiveDismissDisabled()
-    }
-    .sheet(item: $profileToEdit) { profile in
-      BlockedProfileView(profile: profile) { updatedProfile in
-        // Profile was updated, close all modals
-        profileToEdit = nil
-        showProfileModal = false
-        showNewProfileView = false
-      }
-    }
-    .sheet(item: $profileToShowStats) { profile in
-      ProfileInsightsView(profile: profile)
-    }
-    .sheet(isPresented: $showNewProfileView) {
-      BlockedProfileView(profile: nil) { newProfile in
-        strategyManager.toggleBlocking(context: context, activeProfile: newProfile)
-        // Close all modals after creating new profile
-        showNewProfileView = false
-        showProfileModal = false
-        profileToEdit = nil
-      }
-    }
-    .sheet(isPresented: $strategyManager.showCustomStrategyView) {
-      BlockingStrategyActionView(
-        customView: strategyManager.customStrategyView
-      )
-    }
-    .sheet(isPresented: $showDonationView) {
-      SupportView()
-    }
-    .sheet(isPresented: $showEmergencyView) {
-      EmergencyView()
-        .presentationDetents([.height(350)])
     }
     .sheet(isPresented: $showProfileModal) {
       ProfileModalView(
@@ -320,33 +171,45 @@ struct HomeView: View {
         onEditProfile: { profile in
           profileToEdit = profile
           showProfileModal = false
-          showNewProfileView = false
         },
         onCreateProfile: {
           showNewProfileView = true
           showProfileModal = false
-          profileToEdit = nil
         },
         onDeleteProfile: { profile in
           deleteProfile(profile)
           showProfileModal = false
-          profileToEdit = nil
         }
       )
     }
-    .alert(alertTitle, isPresented: $showingAlert) {
-      Button("OK", role: .cancel) { dismissAlert() }
-    } message: {
-      Text(alertMessage)
+    .sheet(isPresented: $showNewProfileView) {
+      BlockedProfileView(profile: nil) { newProfile in
+        strategyManager.toggleBlocking(context: context, activeProfile: newProfile)
+        showNewProfileView = false
+      }
     }
+    .sheet(item: $profileToEdit) { profile in
+      BlockedProfileView(profile: profile) { _ in
+        profileToEdit = nil
+      }
+    }
+    .onChange(of: scenePhase) { _, newPhase in
+      if newPhase == .active {
+        loadApp()
+      } else if newPhase == .background {
+        unloadApp()
+      }
+    }
+    .onAppear { onAppearApp() }
   }
+
+  // MARK: - Funções originais (mantidas)
 
   private func toggleSessionFromDeeplink(_ profileId: String, link: URL) {
     strategyManager.toggleSessionFromDeeplink(profileId, url: link, context: context)
   }
 
   private func strategyButtonPress(_ profile: BlockedProfiles) {
-    // Adicionar vibração tátil
     let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
     impactFeedback.impactOccurred()
     
@@ -364,34 +227,24 @@ struct HomeView: View {
     strategyManager.cleanUpGhostSchedules(context: context)
     loadLastUsedProfile()
   }
-  
+
   private func loadLastUsedProfile() {
-    if !lastUsedProfileId.isEmpty {
-      if let profileId = UUID(uuidString: lastUsedProfileId) {
-        selectedProfile = profiles.first { $0.id == profileId }
-      }
+    if !lastUsedProfileId.isEmpty,
+       let profileId = UUID(uuidString: lastUsedProfileId) {
+      selectedProfile = profiles.first { $0.id == profileId }
     }
   }
-  
+
   private func saveLastUsedProfile(_ profile: BlockedProfiles) {
     lastUsedProfileId = profile.id.uuidString
   }
-  
+
   private func deleteProfile(_ profile: BlockedProfiles) {
-    // If this was the selected profile, clear selection
     if selectedProfile?.id == profile.id {
       selectedProfile = nil
     }
-    
-    // Delete from context
     context.delete(profile)
-    
-    // Save context
-    do {
-      try context.save()
-    } catch {
-      print("Error deleting profile: \(error)")
-    }
+    try? context.save()
   }
 
   private func unloadApp() {
@@ -404,43 +257,29 @@ struct HomeView: View {
     showingAlert = true
   }
 
-  private func dismissAlert() {
-    showingAlert = false
-  }
-  
+  private func dismissAlert() { showingAlert = false }
+
   private func formatElapsedTime(_ timeInterval: TimeInterval) -> String {
     let hours = Int(timeInterval) / 3600
     let minutes = Int(timeInterval) % 3600 / 60
     let seconds = Int(timeInterval) % 60
-    
-    if hours > 0 {
-      return String(format: "%d:%02d:%02d", hours, minutes, seconds)
-    } else {
-      return String(format: "%02d:%02d", minutes, seconds)
-    }
+    return hours > 0
+      ? String(format: "%d:%02d:%02d", hours, minutes, seconds)
+      : String(format: "%02d:%02d", minutes, seconds)
   }
-  
+
   private func getDailyBlockedTime() -> TimeInterval {
     let calendar = Calendar.current
-    let today = Date()
-    let startOfDay = calendar.startOfDay(for: today)
+    let startOfDay = calendar.startOfDay(for: Date())
     let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
-    
     var totalTime: TimeInterval = 0
-    
     for profile in profiles {
-      let todaySessions = profile.sessions.filter { session in
-        guard let endTime = session.endTime else { return false }
-        return session.startTime >= startOfDay && endTime < endOfDay
+      let todaySessions = profile.sessions.filter {
+        guard let endTime = $0.endTime else { return false }
+        return $0.startTime >= startOfDay && endTime < endOfDay
       }
-      
-      for session in todaySessions {
-        if let endTime = session.endTime {
-          totalTime += endTime.timeIntervalSince(session.startTime)
-        }
-      }
+      totalTime += todaySessions.reduce(0) { $0 + ($1.endTime?.timeIntervalSince($1.startTime) ?? 0) }
     }
-    
     return totalTime
   }
 }
@@ -453,9 +292,6 @@ struct HomeView: View {
     .environmentObject(StrategyManager())
     .defaultAppStorage(UserDefaults(suiteName: "preview")!)
     .onAppear {
-      UserDefaults(suiteName: "preview")!.set(
-        false,
-        forKey: "showIntroScreen"
-      )
+      UserDefaults(suiteName: "preview")!.set(false, forKey: "showIntroScreen")
     }
 }
