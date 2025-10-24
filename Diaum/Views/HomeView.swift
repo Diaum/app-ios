@@ -133,19 +133,27 @@ struct HomeView: View {
         .buttonStyle(PlainButtonStyle())
         .padding(.bottom, 36)
 
-        // Modo
+        // Modo - Clickable when not blocking
         VStack(spacing: 6) {
           Text("MODE")
             .font(.system(size: 12, weight: .regular, design: .monospaced))
             .foregroundColor(.white.opacity(0.8))
 
-          Text("BASIC")
-            .font(.system(size: 14, weight: .bold, design: .monospaced))
-            .foregroundColor(.black)
-            .padding(.horizontal, 24)
-            .padding(.vertical, 8)
-            .background(Color.white)
-            .cornerRadius(6)
+          Button(action: {
+            if !isBlocking {
+              showProfileModal = true
+            }
+          }) {
+            Text(selectedProfile?.name ?? "BASIC")
+              .font(.system(size: 14, weight: .bold, design: .monospaced))
+              .foregroundColor(.black)
+              .padding(.horizontal, 24)
+              .padding(.vertical, 8)
+              .background(Color.white)
+              .cornerRadius(6)
+          }
+          .buttonStyle(PlainButtonStyle())
+          .disabled(isBlocking)
         }
 
         Spacer()
@@ -193,6 +201,34 @@ struct HomeView: View {
         profileToEdit = nil
       }
     }
+    .onChange(of: navigationManager.profileId) { _, newValue in
+      if let profileId = newValue, let url = navigationManager.link {
+        toggleSessionFromDeeplink(profileId, link: url)
+        navigationManager.clearNavigation()
+      }
+    }
+    .onChange(of: navigationManager.navigateToProfileId) { _, newValue in
+      if let profileId = newValue {
+        navigateToProfileId = UUID(uuidString: profileId)
+        navigationManager.clearNavigation()
+      }
+    }
+    .onChange(of: requestAuthorizer.isAuthorized) { _, newValue in
+      if newValue {
+        showIntroScreen = false
+      } else {
+        showIntroScreen = true
+      }
+    }
+    .onChange(of: profiles) { oldValue, newValue in
+      if !newValue.isEmpty {
+        loadApp()
+        // Auto-select first profile if none selected
+        if selectedProfile == nil {
+          selectedProfile = newValue.first
+        }
+      }
+    }
     .onChange(of: scenePhase) { _, newPhase in
       if newPhase == .active {
         loadApp()
@@ -200,7 +236,22 @@ struct HomeView: View {
         unloadApp()
       }
     }
+    .onReceive(strategyManager.$errorMessage) { errorMessage in
+      if let message = errorMessage {
+        showErrorAlert(message: message)
+      }
+    }
     .onAppear { onAppearApp() }
+    .sheet(isPresented: $showIntroScreen) {
+      IntroView {
+        requestAuthorizer.requestAuthorization()
+      }.interactiveDismissDisabled()
+    }
+    .alert(alertTitle, isPresented: $showingAlert) {
+      Button("OK", role: .cancel) { dismissAlert() }
+    } message: {
+      Text(alertMessage)
+    }
   }
 
   // MARK: - Funções originais (mantidas)
