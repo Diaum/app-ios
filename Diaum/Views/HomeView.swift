@@ -217,55 +217,39 @@ struct HomeView: View {
                 VStack(spacing: 16) {
                     HStack(spacing: 8) {
                         Text("MODE")
-                            .font(.system(size: 14, weight: .medium))
+                            .font(.system(size: 12, weight: .medium))
                             .foregroundColor(.white.opacity(0.6))
                         Image(systemName: "gearshape")
-                            .font(.system(size: 12))
+                            .font(.system(size: 10))
                             .foregroundColor(.white.opacity(0.6))
                     }
                     
-                    HStack(spacing: 12) {
-                        Button("BASIC") { }
-                            .font(.system(size: 14, weight: .bold))
-                            .foregroundColor(.white)
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 10)
-                            .background(Color(red: 0.1, green: 0.1, blue: 0.1))
-                            .cornerRadius(8)
-                            .shadow(color: .black.opacity(0.5), radius: 2, x: 1, y: 1)
-                        
-                        Button("SOCIAL") { }
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(.white.opacity(0.4))
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 10)
-                            .background(Color.white.opacity(0.1))
-                            .cornerRadius(8)
-                    }
-                    
-                    HStack(spacing: 6) {
-                        ForEach(0..<3) { index in
-                            Circle()
-                                .fill(index == 0 ? Color.white : Color.white.opacity(0.3))
-                                .frame(width: 6, height: 6)
-                        }
-                    }
+                    // Show only selected mode in dark mode
+                    Text(strategyManager.activeSession?.blockedProfile.name ?? "BASIC")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 10)
+                        .background(Color(red: 0.1, green: 0.1, blue: 0.1))
+                        .cornerRadius(8)
+                        .shadow(color: .black.opacity(0.5), radius: 2, x: 1, y: 1)
                 }
                 .padding(.bottom, 40)
-                
-                // Timer section
-                VStack(spacing: 8) {
-                    Text("YOU'VE BEEN BLOCKED FOR")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(.white.opacity(0.6))
-                        .tracking(0.5)
-                    
-                    Text(formatElapsedTime(calculateElapsedTime()))
-                        .font(.system(size: 16, weight: .bold, design: .monospaced))
-                        .foregroundColor(.white)
-                }
-                .padding(.bottom, 20)
             }
+            
+            // Timer section - moved to bottom
+            VStack(spacing: 8) {
+                Text("YOU'VE BEEN BLOCKED FOR")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(.white.opacity(0.6))
+                    .tracking(0.5)
+                
+                Text(formatElapsedTime(calculateElapsedTime()))
+                    .font(.system(size: 16, weight: .bold, design: .monospaced))
+                    .foregroundColor(.white)
+            }
+            .padding(.bottom, 20)
+            
             Spacer()
         }
     }
@@ -335,24 +319,34 @@ struct HomeView: View {
                 .padding(.bottom, 32)
                 
                 VStack(spacing: 16) {
-                    HStack(spacing: 8) {
-                        Text("MODE")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(.gray)
-                        Image(systemName: "gearshape")
-                            .font(.system(size: 12))
-                            .foregroundColor(.gray)
+                    Button(action: {
+                        showProfileModal = true
+                    }) {
+                        HStack(spacing: 8) {
+                            Text("MODE")
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundColor(.gray)
+                            Image(systemName: "gearshape")
+                                .font(.system(size: 10))
+                                .foregroundColor(.gray)
+                        }
                     }
+                    .buttonStyle(PlainButtonStyle())
                     
                     HStack(spacing: 12) {
-                        Button("BASIC") { }
-                            .font(.system(size: 14, weight: .bold))
-                            .foregroundColor(.black)
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 10)
-                            .background(Color.white)
-                            .cornerRadius(8)
-                            .shadow(color: .black.opacity(0.1), radius: 2, x: 1, y: 1)
+                        Button(action: {
+                            showProfileModal = true
+                        }) {
+                            Text(selectedProfile?.name ?? "BASIC")
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(.black)
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 10)
+                                .background(Color.white)
+                                .cornerRadius(8)
+                                .shadow(color: .black.opacity(0.1), radius: 2, x: 1, y: 1)
+                        }
+                        .buttonStyle(PlainButtonStyle())
                         
                         Button("SOCIAL") { }
                             .font(.system(size: 14, weight: .medium))
